@@ -1,0 +1,10 @@
+world:
+  name: circle_cw
+agents:
+  - id: A
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: n_step_progress
+      params: {n_steps: 10}

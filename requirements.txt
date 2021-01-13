@@ -1,0 +1,9 @@
+dm-acme
+dm-acme[reverb]
+dm-acme[tf]
+dm-acme[jax]
+dm-acme[envs]
+jaxlib==0.1.57+cuda110
+tensorflow_probability
+imageio
+imageio-ffmpeg

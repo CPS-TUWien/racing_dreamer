@@ -1,0 +1,18 @@
+- name: Vectorized
+
+- name: FixedResetMode
+  mode: grid
+
+- name: TimeLimit
+  max_episode_steps: 1000
+
+- name: multi_agent.FilterObservation
+  filter_keys: [lidar]
+
+- name: multi_agent.Flatten
+  flatten_obs: True
+  flatten_actions: True
+
+- name: multi_agent.NormalizeObservations
+
+

@@ -1,0 +1,34 @@
+world:
+  name: columbia
+agents:
+  - id: A
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: n_step_progress
+      params: {n_steps: 10}
+  - id: B
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+      color: red
+    task:
+      task_name: n_step_progress
+      params: {n_steps: 10}
+  - id: C
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+      color: yellow
+    task:
+      task_name: n_step_progress
+      params: {n_steps: 10}
+  - id: D
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+      color: magenta
+    task:
+      task_name: n_step_progress
+      params: {n_steps: 10}

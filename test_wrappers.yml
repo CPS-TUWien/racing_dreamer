@@ -1,0 +1,20 @@
+- name: Vectorized
+
+- name: FixedResetMode
+  mode: grid
+
+- name: ActionRepeat
+  n: 10
+
+- name: TimeLimit
+  max_episode_steps: 200
+
+- name: FilterObservation
+  filter_keys: [lidar]
+
+- name: Flatten
+  flatten_obs: True
+  flatten_actions: True
+
+- name: NormalizeObservations
+
