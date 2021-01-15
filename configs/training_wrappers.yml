@@ -1,0 +1,11 @@
+- name: InfoToObservation
+
+- name: FixedResetMode
+  mode: random
+
+- name: TimeLimit
+  max_episode_steps: 2000
+
+- name: ActionRepeat
+  n: 10
+

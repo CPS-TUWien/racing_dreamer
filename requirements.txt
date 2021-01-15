@@ -3,7 +3,9 @@ dm-acme[reverb]
 dm-acme[tf]
 dm-acme[jax]
 dm-acme[envs]
-jaxlib==0.1.57+cuda110
+jax
 tensorflow_probability
 imageio
 imageio-ffmpeg
+-e git+https://github.com/axelbr/racecar_gym.git#egg=racecar_gym
+optuna

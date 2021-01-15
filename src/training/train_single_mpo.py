@@ -24,7 +24,7 @@ import numpy as np
 from src.logger import TensorboardLogger
 import src.util as util
 
-env = make_multi_agent_env(scenario='scenarios/columbia.yml', render=True)
+env = make_single_agent_env(scenario='scenarios/columbia.yml', render=True)
 test_envs = [(track, make_multi_agent_env(scenario=f'scenarios/{track}.yml', render=False, test=True)) for track in ['columbia']]
 env_spec = specs.make_environment_spec(env)
 action_size = np.prod(env_spec.actions['A'].shape, dtype=int)
