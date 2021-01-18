@@ -1,4 +1,4 @@
-from racecar_gym import Task
+from racecar_gym import Task, register_task
 import math
 
 class NStepProgress(Task):
@@ -33,3 +33,5 @@ class NStepProgress(Task):
     def reset(self):
         self._reference_progress = 0.0
         self._current_step = 0
+
+register_task(name='n_step_progress', task=NStepProgress)

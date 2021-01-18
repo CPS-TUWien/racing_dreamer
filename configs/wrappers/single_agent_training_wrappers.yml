@@ -1,0 +1,21 @@
+- name: FilterObservation
+  filter_keys: ['lidar']
+
+- name: single_agent.Flatten
+  flatten_obs: True
+  flatten_actions: True
+
+- name: single_agent.NormalizeObservations
+
+- name: FixedResetMode
+  mode: random
+
+- name: TimeLimit
+  max_episode_steps: 2000
+
+- name: single_agent.ActionRepeat
+  n: 4
+
+- name: GymWrapper(environment=env)
+
+- name: SinglePrecisionWrapper

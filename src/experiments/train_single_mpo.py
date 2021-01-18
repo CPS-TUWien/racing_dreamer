@@ -21,7 +21,7 @@ import acme.specs as specs
 import sonnet as snt
 import numpy as np
 
-from src.logger import TensorboardLogger
+from src.logger import TensorBoardLogger
 import src.util as util
 
 env = make_single_agent_env(scenario='scenarios/columbia.yml', render=True)
@@ -51,7 +51,7 @@ tf2_utils.create_variables(target_critic_network, input_spec=[obs_spec, action_s
 
 
 terminal_logger = TerminalLogger()
-mpo_logger = TensorboardLogger(logdir=f'logs/mpo-{time()}', prefix='MPO')
+mpo_logger = TensorBoardLogger(logdir=f'logs/mpo-{time()}', prefix='MPO')
 
 
 actors = dict()

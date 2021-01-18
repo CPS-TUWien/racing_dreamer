@@ -1,0 +1,11 @@
+version: '3'
+services:
+  mysql_db:
+    image: mysql:5.7
+    environment:   # Set up mysql database name and password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: optuna
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    network_mode: host
+

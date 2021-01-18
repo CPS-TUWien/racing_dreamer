@@ -1,12 +1,23 @@
 from collections import defaultdict
 from time import time
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Mapping, Dict
 
 import imageio
 from acme import EnvironmentLoop, core, Actor
 from acme.agents.agent import Agent
+from acme.utils.counting import Counter, Number
 from acme.utils.loggers import TerminalLogger, Logger
 from dm_env import Environment
+
+class ActionRepeatCounter(Counter):
+
+    def __init__(self, action_repeat: int, time_delta: float = 1.0, parent: Optional['Counter'] = None, prefix: str = '', return_only_prefixed: bool = False):
+        super().__init__(parent, prefix, time_delta, return_only_prefixed)
+        self._action_repeat = action_repeat
+
+    def increment(self, **counts: Number) -> Dict[str, Number]:
+        counts = dict([(k, v * self._action_repeat) for k, v in counts.items()])
+        return super().increment(**counts)
 
 
 def save_video(filename: str, frames, fps):

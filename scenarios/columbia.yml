@@ -5,9 +5,9 @@ agents:
     vehicle:
       name: racecar
       sensors: [ lidar, pose, velocity, acceleration ]
-    task:
-      task_name: n_step_progress
-      params: {n_steps: 10}
+  - task:
+    task_name: maximize_progress
+    params: { laps: 10, time_limit: 180.0, terminate_on_collision: True, collision_reward: -1.0 }
   - id: B
     vehicle:
       name: racecar

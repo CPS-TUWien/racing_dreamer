@@ -63,9 +63,9 @@ class Flatten(Wrapper):
 
     def reset(self, **kwargs):
         if self._flatten_obs:
-            return spaces.flatten(self.env.observation_space, self.env.reset())
+            return spaces.flatten(self.env.observation_space, self.env.reset(**kwargs))
         else:
-            return self.env.reset()
+            return self.env.reset(**kwargs)
 
 
 class NormalizeObservations(ObservationWrapper):

@@ -3,6 +3,8 @@ import gym
 import yaml
 import src.wrappers as wrappers
 import gym.wrappers as gym_wrappers
+import acme.wrappers as acme_wrappers
+import src.tasks
 
 def wrap_env(env: gym.Env, wrapper_configs: Union[str, List[Dict]]) -> gym.Env:
     if isinstance(wrapper_configs, str):
@@ -30,6 +32,8 @@ def wrap_env(env: gym.Env, wrapper_configs: Union[str, List[Dict]]) -> gym.Env:
             wrapper_cls = get_cls(name=name, module=wrappers)
         elif hasattr(gym_wrappers, name):
             wrapper_cls = getattr(gym_wrappers, name)
+        elif hasattr(acme_wrappers, name):
+            wrapper_cls = getattr(acme_wrappers, name)
         else:
             raise NotImplementedError(f'No wrapper named {name} available.')
         del wrapper['name']
