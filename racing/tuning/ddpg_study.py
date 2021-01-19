@@ -14,10 +14,10 @@ from optuna.integration import TensorBoardCallback
 from racecar_gym import SingleAgentScenario, SingleAgentRaceEnv, VectorizedSingleAgentRaceEnv
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 import numpy as np
-from src.agents import make_mpo_agent
-from src.logger import TensorBoardLogger, PrefixedTensorBoardLogger
-from src.tuning import util
-from src import experiments
+from racing.agents import make_mpo_agent
+from racing.logger import TensorBoardLogger, PrefixedTensorBoardLogger
+from racing.tuning import util
+from racing import experiments
 
 def sample_params(trial: Trial):
     return dict(

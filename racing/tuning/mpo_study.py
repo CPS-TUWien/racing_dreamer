@@ -10,17 +10,17 @@ from optuna.integration import TensorBoardCallback
 from racecar_gym import SingleAgentScenario, SingleAgentRaceEnv, VectorizedSingleAgentRaceEnv
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 import numpy as np
-from src.agents import make_mpo_agent
-from src.logger import TensorBoardLogger, PrefixedTensorBoardLogger
-from src.wrappers import wrap_env
-from src import experiments
+from racing.agents import make_mpo_agent
+from racing.logger import TensorBoardLogger, PrefixedTensorBoardLogger
+from racing.environment import wrap_env
+from racing import experiments
 
 def objective(trial: Trial, env_steps: int, test_interval: int, test_episodes: int, tracks: List[str], action_repeat: int = 1):
     scenarios = [SingleAgentScenario.from_spec(f'scenarios/{track}.yml') for track in tracks]
     train_env = SingleAgentRaceEnv(scenarios[0])
     test_env = SingleAgentRaceEnv([SingleAgentScenario.from_spec(f'scenarios/{track}.yml') for track in tracks][0])
-    train_env = wrap_env(env=train_env, wrapper_configs='./configs/wrappers/single_agent_wrappers.yml')
-    test_env = wrap_env(env=test_env, wrapper_configs='./configs/wrappers/single_agent_test_wrappers.yml')
+    train_env = wrap_env(env=train_env, wrapper_configs='./configs/environment/single_agent_wrappers.yml')
+    test_env = wrap_env(env=test_env, wrapper_configs='./configs/environment/single_agent_test_wrappers.yml')
 
     tunable_params = dict(
         loss_epsilon=trial.suggest_float(name='loss_epsilon', low=0.001, high=0.1),

@@ -2,7 +2,7 @@ from dm_env import Environment
 from gym import Env
 import gym.wrappers as gym_wrappers
 import acme.wrappers as acme_wrappers
-from src.wrappers import single_agent as wrappers, FixedResetMode
+from racing.environment import single_agent as wrappers, FixedResetMode
 
 
 def _common_wrappers(env: Env):

@@ -1,10 +1,9 @@
 from typing import Union, List, Dict
 import gym
 import yaml
-import src.wrappers as wrappers
 import gym.wrappers as gym_wrappers
 import acme.wrappers as acme_wrappers
-import src.tasks
+
 
 def wrap_env(env: gym.Env, wrapper_configs: Union[str, List[Dict]]) -> gym.Env:
     if isinstance(wrapper_configs, str):
@@ -28,8 +27,8 @@ def wrap_env(env: gym.Env, wrapper_configs: Union[str, List[Dict]]) -> gym.Env:
 
     for wrapper in wrapper_configs:
         name = wrapper['name']
-        if has_modules(name=name, module=wrappers):
-            wrapper_cls = get_cls(name=name, module=wrappers)
+        if has_modules(name=name, module=environment):
+            wrapper_cls = get_cls(name=name, module=environment)
         elif hasattr(gym_wrappers, name):
             wrapper_cls = getattr(gym_wrappers, name)
         elif hasattr(acme_wrappers, name):

@@ -8,6 +8,7 @@ import sonnet as snt
 from acme import adders, datasets
 from acme.agents.agent import Agent
 from acme.agents.tf import actors
+from acme.agents.tf.actors import FeedForwardActor
 from acme.agents.tf.mpo import MPO, learning
 from acme.tf import networks, losses
 from acme.utils.loggers import Logger
@@ -70,6 +71,12 @@ def make_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams:
     policy_optimizer = Adam(params.pop('policy_lr'))
     critic_optimizer = Adam(params.pop('critic_lr'))
 
+    actor = FeedForwardActor(policy_network=snt.Sequential([
+        observation_network,
+        policy_network,
+        networks.StochasticModeHead()
+    ]))
+
     # The learner updates the parameters (and initializes them).
     return MPO(
         environment_spec=env_spec,
@@ -79,5 +86,6 @@ def make_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams:
         policy_loss_module=policy_loss_module,
         policy_optimizer=policy_optimizer,
         critic_optimizer=critic_optimizer,
-        logger=logger
-    )
+        logger=logger,
+        **params
+    ), actor

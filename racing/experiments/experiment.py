@@ -1,10 +1,13 @@
 import os
+import random
 from functools import partial
 from time import time
 from typing import List, Tuple, Callable
-import tensorflow as tf
+
 import gym
 import imageio
+import numpy as np
+import tensorflow as tf
 from acme import wrappers, make_environment_spec
 from acme.agents.agent import Agent
 from acme.specs import EnvironmentSpec
@@ -14,12 +17,11 @@ from acme.wrappers import GymWrapper
 from gym.wrappers import TimeLimit, FilterObservation
 from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
-import random
-import numpy as np
-from src.logger import TensorBoardLogger, PrefixedTensorBoardLogger
-from src.agents.mpo import make_mpo_agent
-from src.wrappers import InfoToObservation, FixedResetMode
-from src.wrappers.single_agent import ActionRepeat, Flatten, NormalizeObservations
+
+from racing.agents.mpo import make_mpo_agent
+from racing.environment import InfoToObservation, FixedResetMode
+from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations
+from racing.logger import TensorBoardLogger, PrefixedTensorBoardLogger
 
 ACTION_REPEAT = 4
 
@@ -78,7 +80,7 @@ class SingleAgentExperiment:
         test_logger = PrefixedTensorBoardLogger(base_logger=self._logger, prefix='test')
 
         env_spec = make_environment_spec(self.train_env)
-        agent = agent_constructor(env_spec, train_logger)
+        agent, eval_actor = agent_constructor(env_spec, train_logger)
 
         step_counter = Counter()
         t = 0
@@ -88,7 +90,7 @@ class SingleAgentExperiment:
             render = t >= render_interval * eval_every_steps * iterations
             if render:
                 iterations += 1
-            test_result = self.test(agent, render=render, timestep=t)
+            test_result = self.test(eval_actor, render=render, timestep=t)
             test_logger.write(test_result, step=t)
             self.train(steps=eval_every_steps, agent=agent, counter=step_counter, logger=train_logger)
             t = step_counter.get_counts()['steps']
@@ -116,10 +118,12 @@ class SingleAgentExperiment:
                     dnf[track] = True
 
                 if not dnf[track]:
+                    progress = step.observation['info_progress']
+                    lap = step.observation['info_lap']
                     if len(self._test_tracks) == 1:
-                        max_progress['progress'] = max(max_progress['progress'], step.observation['info_progress'])
+                        max_progress['progress'] = max(max_progress['progress'], progress + lap - 1)
                     else:
-                        max_progress[f'progress_{track}'] = max(max_progress[f'progress_{track}'], step.observation['info_progress'])
+                        max_progress[f'progress_{track}'] = max(max_progress[f'progress_{track}'], progress + lap - 1)
 
             if render:
                 print('Save video.')

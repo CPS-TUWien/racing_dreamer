@@ -1,28 +1,23 @@
 import copy
-from time import sleep, time
+from time import time
 
-import imageio
 import reverb
 from acme import environment_loop
-from acme.agents.agent import Agent
-from acme.agents.tf import mpo
 from acme.agents.tf.actors import FeedForwardActor
 from acme.tf import networks
 from acme.tf import utils as tf2_utils
 from acme.adders import reverb as adders
-from acme.utils import loggers
-from acme.utils.loggers import Dispatcher, TerminalLogger
-from dm_env import Environment
+from acme.utils.loggers import TerminalLogger
 
-from src.actors import MultiAgentActor
-from src.agents import MPO
-from src.environment import make_single_agent_env, make_multi_agent_env
+from racing.agents.actors import MultiAgentActor
+from racing.agents import MPO
+from racing.environment import make_single_agent_env, make_multi_agent_env
 import acme.specs as specs
 import sonnet as snt
 import numpy as np
 
-from src.logger import TensorBoardLogger
-import src.util as util
+from racing.logger import TensorBoardLogger
+import racing.util as util
 
 env = make_single_agent_env(scenario='scenarios/columbia.yml', render=True)
 test_envs = [(track, make_multi_agent_env(scenario=f'scenarios/{track}.yml', render=False, test=True)) for track in ['columbia']]
