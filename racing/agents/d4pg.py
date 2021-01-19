@@ -43,7 +43,8 @@ def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams
     action_size = np.prod(env_spec.actions.shape, dtype=int).item()
     policy_network = snt.Sequential([
         networks.LayerNormMLP(layer_sizes=[*params.pop('policy_layers'), action_size]),
-        networks.MultivariateNormalDiagHead(num_dimensions=action_size)
+        networks.NearZeroInitializedLinear(output_size=action_size),
+        networks.TanhToSpec(env_spec.actions),
     ])
 
     critic_network = snt.Sequential([
@@ -57,8 +58,7 @@ def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams
 
     actor = FeedForwardActor(policy_network=snt.Sequential([
         observation_network,
-        policy_network,
-        StochasticModeHead()
+        policy_network
     ]))
 
     # Make sure observation network is a Sonnet Module.
@@ -76,5 +76,6 @@ def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams
         observation_network=observation_network,
         policy_optimizer=policy_optimizer,
         critic_optimizer=critic_optimizer,
+        logger=logger,
         **params
     ), actor

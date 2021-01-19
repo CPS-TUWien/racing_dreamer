@@ -21,7 +21,7 @@ def main(args):
     seeds = [123456789, 234567891, 345678912, 456789123, 567891234]
     runs = []
     for seed in seeds:
-        run_experiment(track='austria', seed=seed)
+        run_experiment(track=args[1], seed=seed)
         #process = Process(target=run_experiment, args=('austria', seed))
         #process.start()
         #runs.append(process)
