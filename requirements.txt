@@ -4,6 +4,7 @@ dm-acme[tf]
 dm-acme[jax]
 dm-acme[envs]
 jax
+tensorflow
 tensorflow_probability
 imageio
 imageio-ffmpeg

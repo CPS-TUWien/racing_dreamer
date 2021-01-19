@@ -3,7 +3,6 @@ from typing import Dict
 
 import acme.specs as specs
 import numpy as np
-import reverb
 import sonnet as snt
 from acme import adders, datasets
 from acme.agents.agent import Agent
