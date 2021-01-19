@@ -20,8 +20,9 @@ def main(args):
     tf.config.experimental.set_memory_growth(physical_devices[0], True)
     seeds = [123456789, 234567891, 345678912, 456789123, 567891234]
     runs = []
-    for seed in seeds:
-        run_experiment(track=args[1], seed=seed)
+    run_experiment(track=args[1], seed=seeds[int(args[0])])
+    #   for seed in seeds:
+    #    run_experiment(track=args[1], seed=seed)
         #process = Process(target=run_experiment, args=('austria', seed))
         #process.start()
         #runs.append(process)
