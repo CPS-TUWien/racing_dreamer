@@ -4,7 +4,7 @@ from acme.agents.agent import Agent
 from dm_env import Environment
 import numpy as np
 
-from .common import run_episode
+from racing.experiments.common import run_episode
 
 
 def train_episode(agent: Agent, env: Environment, action_repeat: int = 1):

@@ -11,7 +11,6 @@ import numpy as np
 class TensorBoardLogger(Logger):
     def __init__(self, logdir: str, file_suffix: str = None):
         self._counter = Counter()
-
         self._writer = tf.summary.create_file_writer(logdir, filename_suffix=file_suffix)
 
     def write(self, data: LoggingData, incremental_step: int = 1, step: int = None):

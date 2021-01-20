@@ -8,11 +8,11 @@ from acme import adders, datasets
 from acme.agents.agent import Agent
 from acme.agents.tf import actors
 from acme.agents.tf.actors import FeedForwardActor
-from acme.agents.tf.mpo import MPO, learning
 from acme.tf import networks, losses
 from acme.utils.loggers import Logger
 from sonnet.src.optimizers.adam import Adam
 from acme.tf import utils as tf2_utils
+from .agents import MPO
 import tensorflow as tf
 
 DEFAULT_PARAMS = dict(
@@ -40,7 +40,7 @@ DEFAULT_PARAMS = dict(
 )
 
 
-def make_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams: Dict):
+def make_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams: Dict, checkpoint_path: str):
     params = DEFAULT_PARAMS.copy()
     params.update(hyperparams)
     action_size = np.prod(env_spec.actions.shape, dtype=int).item()
@@ -86,5 +86,6 @@ def make_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams:
         policy_optimizer=policy_optimizer,
         critic_optimizer=critic_optimizer,
         logger=logger,
+        checkpoint_path=checkpoint_path,
         **params
     ), actor

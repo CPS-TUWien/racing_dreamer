@@ -10,7 +10,7 @@ from optuna.integration import TensorBoardCallback
 from racecar_gym import SingleAgentScenario, SingleAgentRaceEnv, VectorizedSingleAgentRaceEnv
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 import numpy as np
-from racing.agents import make_mpo_agent
+from racing.algorithms import make_mpo_agent
 from racing.logger import TensorBoardLogger, PrefixedTensorBoardLogger
 from racing.environment import wrap_env
 from racing import experiments

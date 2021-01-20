@@ -1,14 +1,14 @@
 import os
 import random
-from functools import partial
+from dataclasses import dataclass
 from time import time
-from typing import List, Tuple, Callable
+from typing import List, Callable, Tuple
 
 import gym
 import imageio
 import numpy as np
 import tensorflow as tf
-from acme import wrappers, make_environment_spec
+from acme import wrappers, make_environment_spec, Actor
 from acme.agents.agent import Agent
 from acme.specs import EnvironmentSpec
 from acme.utils.counting import Counter
@@ -18,12 +18,9 @@ from gym.wrappers import TimeLimit, FilterObservation
 from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 
-from racing.agents.mpo import make_mpo_agent
 from racing.environment import InfoToObservation, FixedResetMode
 from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations
 from racing.logger import TensorBoardLogger, PrefixedTensorBoardLogger
-
-ACTION_REPEAT = 4
 
 def save_video(filename: str, frames, fps):
     if not os.path.exists(os.path.dirname(filename)):
@@ -32,27 +29,40 @@ def save_video(filename: str, frames, fps):
         for frame in frames:
             video.append_data(frame)
 
-class SingleAgentExperiment:
 
-    def __init__(self, seed: int, name: str, tracks: Tuple[List[str], List[str]],  logger: Logger = None):
+class SingleAgentExperiment:
+    @dataclass
+    class EnvConfig:
+        track: str
+        action_repeat: int = 4
+        training_time_limit: int = 2000
+        eval_time_limit: int = 4000
+
+    def __init__(self, env_config: EnvConfig, seed: int, logdir: str = 'logs/experiments'):
+        self._set_seed(seed)
+        self._train_tracks, self._test_tracks = [env_config.track], [env_config.track]
+        self._logdir = logdir
+        self._logger = TensorBoardLogger(logdir=self._logdir)
+        self._env_config = env_config
+        self.train_env = self._wrap_training(self._make_env(tracks=self._train_tracks))
+        self.test_env = self._wrap_test(env=self._make_env(tracks=self._test_tracks))
+        self._counter = Counter()
+        self._counter.increment(steps=0)
+
+
+    def _set_seed(self, seed):
         tf.random.set_seed(seed)
         np.random.seed(seed)
         random.seed(seed)
         os.environ['PYTHONHASHSEED'] = str(seed)
-        self._train_tracks, self._test_tracks = tracks
-        self._name = name
-        self._logdir = f'experiments/{name}-{time()}'
-        self._logger = logger or TensorBoardLogger(logdir=self._logdir)
-        self.train_env = self._wrap_training(self._make_env(tracks=self._train_tracks))
-        self.test_env = self._wrap_test(env=self._make_env(tracks=self._test_tracks))
 
     def _wrap_training(self, env: gym.Env):
         env = FilterObservation(env, filter_keys=['lidar'])
         env = Flatten(env, flatten_obs=True, flatten_actions=True)
         env = NormalizeObservations(env)
         env = FixedResetMode(env, mode='random')
-        env = TimeLimit(env, max_episode_steps=2000)
-        env = ActionRepeat(env, n=ACTION_REPEAT)
+        env = TimeLimit(env, max_episode_steps=self._env_config.training_time_limit)
+        env = ActionRepeat(env, n=self._env_config.action_repeat)
         env = GymWrapper(environment=env)
         env = wrappers.SinglePrecisionWrapper(env)
         return env
@@ -63,8 +73,8 @@ class SingleAgentExperiment:
         env = NormalizeObservations(env)
         env = InfoToObservation(env)
         env = FixedResetMode(env, mode='grid')
-        env = TimeLimit(env, max_episode_steps=4000)
-        gym_env = ActionRepeat(env, n=ACTION_REPEAT)
+        env = TimeLimit(env, max_episode_steps=self._env_config.eval_time_limit)
+        gym_env = ActionRepeat(env, n=self._env_config.action_repeat)
         env = GymWrapper(environment=gym_env)
         env = wrappers.SinglePrecisionWrapper(env)
         env.gym_env = gym_env
@@ -75,28 +85,33 @@ class SingleAgentExperiment:
         env = ChangingTrackSingleAgentRaceEnv(scenarios=scenarios, order='sequential')
         return env
 
-    def run(self, steps: int, agent_constructor: Callable[[EnvironmentSpec, Logger], Agent], eval_every_steps: int = 10000):
+    def run(self,
+            steps: int,
+            agent_ctor: Callable[[EnvironmentSpec, Logger], Tuple[Agent, Actor]],
+            eval_every_steps: int = 10000
+            ):
+
         train_logger = PrefixedTensorBoardLogger(base_logger=self._logger, prefix='train')
         test_logger = PrefixedTensorBoardLogger(base_logger=self._logger, prefix='test')
 
         env_spec = make_environment_spec(self.train_env)
-        agent, eval_actor = agent_constructor(env_spec, train_logger)
+        agent, eval_actor = agent_ctor(env_spec, train_logger)
 
-        step_counter = Counter()
-        t = 0
+        t = self._counter.get_counts()['steps']
         iterations = 0
         render_interval = 5
         while t < steps:
-            render = t >= render_interval * eval_every_steps * iterations
-            if render:
+            should_render = t >= render_interval * eval_every_steps * iterations
+            if should_render:
                 iterations += 1
-            test_result = self.test(eval_actor, render=render, timestep=t)
+            test_result = self.test(eval_actor, render=should_render, timestep=t)
             test_logger.write(test_result, step=t)
-            self.train(steps=eval_every_steps, agent=agent, counter=step_counter, logger=train_logger)
-            t = step_counter.get_counts()['steps']
+            self.train(steps=eval_every_steps, agent=agent, counter=self._counter, logger=train_logger)
+            t = self._counter.get_counts()['steps']
+        self.train_env.environment.close()
+        self.test_env.environment.close()
 
-
-    def test(self, agent: Agent, timestep: int, render: bool = False):
+    def test(self, agent: Actor, timestep: int, render: bool = False):
         if len(self._test_tracks) == 1:
             max_progress = dict(progress=0)
         else:
@@ -143,7 +158,7 @@ class SingleAgentExperiment:
                 timestep = self.train_env.step(action)
                 agent.observe(action, next_timestep=timestep)
                 agent.update()
-                episode_steps += ACTION_REPEAT
+                episode_steps += self._env_config.action_repeat
                 episode_return += timestep.reward
 
             counts = counter.increment(episodes=1, steps=episode_steps)
@@ -167,7 +182,7 @@ class SingleAgentExperiment:
             timestep = self.train_env.step(action)
             agent.observe(action, next_timestep=timestep)
             agent.update()
-            episode_steps += ACTION_REPEAT
+            episode_steps += self._env_config.action_repeat
             episode_return += timestep.reward
         steps_per_second = episode_steps / (time() - start_time)
         result = {
@@ -176,9 +191,3 @@ class SingleAgentExperiment:
             'steps_per_second': steps_per_second,
         }
         return result
-
-
-if __name__ == '__main__':
-    experiment = SingleAgentExperiment(name='austria_single', tracks=(['austria'], ['austria']))
-    constructor = partial(make_mpo_agent, hyperparams={})
-    experiment.run(steps=5_000_000, agent_constructor=constructor, eval_every_steps=10000)

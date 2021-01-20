@@ -9,7 +9,7 @@ from acme import adders, datasets
 from acme.agents.agent import Agent
 from acme.agents.tf import actors
 from acme.agents.tf.actors import FeedForwardActor
-from acme.agents.tf.d4pg import D4PG
+from .agents import D4PG
 from acme.agents.tf.mpo import MPO, learning
 from acme.tf import networks, losses
 from acme.tf.networks import StochasticModeHead
@@ -31,13 +31,13 @@ DEFAULT_PARAMS = dict(
     samples_per_insert=32.0,
     n_step=5,
     clipping=True,
-    checkpoint=False,
+    checkpoint=True,
     max_replay_size=1000000,
     min_replay_size=1000,
 )
 
 
-def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams: Dict):
+def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, checkpoint_path: str, hyperparams: Dict):
     params = DEFAULT_PARAMS.copy()
     params.update(hyperparams)
     action_size = np.prod(env_spec.actions.shape, dtype=int).item()
@@ -77,5 +77,6 @@ def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams
         policy_optimizer=policy_optimizer,
         critic_optimizer=critic_optimizer,
         logger=logger,
+        checkpoint_path=checkpoint_path,
         **params
     ), actor
