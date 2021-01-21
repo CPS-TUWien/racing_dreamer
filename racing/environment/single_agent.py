@@ -31,13 +31,14 @@ class ActionRepeat(Wrapper):
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
         total_reward = reward
-        for _ in range(self._repeat-1):
+        for _ in range(self._repeat - 1):
             obs, reward, done, info = self.env.step(action)
             total_reward += reward
             if done:
                 break
 
         return obs, total_reward, done, info
+
 
 class Flatten(Wrapper):
 
@@ -49,8 +50,7 @@ class Flatten(Wrapper):
             self.observation_space = spaces.flatten_space(env.observation_space)
         if flatten_actions:
             self.action_space = spaces.flatten_space(env.action_space)
-            self.action_space = Box(low=-1.0, high = 1.0, shape=self.action_space.shape)
-
+            self.action_space = Box(low=-1.0, high=1.0, shape=self.action_space.shape)
 
     def step(self, action):
         action = np.clip(action, self.action_space.low, self.action_space.high)
@@ -76,7 +76,8 @@ class NormalizeObservations(ObservationWrapper):
             obs_spaces = []
             self._scaler = dict()
             for name, space in env.observation_space.spaces.items():
-                obs_spaces.append((name, gym.spaces.Box(low=np.zeros(space.shape), high=np.ones(space.shape), dtype=space.dtype)))
+                obs_spaces.append(
+                    (name, gym.spaces.Box(low=np.zeros(space.shape), high=np.ones(space.shape), dtype=space.dtype)))
                 self._scaler[name] = 1.0 / (space.high - space.low)
             self.observation_space = spaces.Dict(obs_spaces)
 
@@ -91,7 +92,20 @@ class NormalizeObservations(ObservationWrapper):
     def observation(self, observation):
         if isinstance(observation, dict):
             for name in observation:
-                observation[name] = (observation[name] - self.env.observation_space.spaces[name].low) * self._scaler[name]
+                observation[name] = (observation[name] - self.env.observation_space.spaces[name].low) * self._scaler[
+                    name]
             return observation
         else:
             return (observation - self.env.observation_space.low) * self._scaler
+
+
+class ReduceActionSpace(Wrapper):
+
+    def __init__(self, env, low, high):
+        super(ReduceActionSpace, self).__init__(env)
+        self._low = np.array(low)
+        self._high = np.array(high)
+
+    def step(self, action):
+        original = (action + 1) / 2 * (self._high - self._low) + self._low
+        return self.env.step(original)

@@ -19,7 +19,7 @@ from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 
 from racing.environment import InfoToObservation, FixedResetMode
-from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations
+from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations, ReduceActionSpace
 from racing.logger import TensorBoardLogger, PrefixedTensorBoardLogger
 
 def save_video(filename: str, frames, fps):
@@ -143,7 +143,7 @@ class SingleAgentExperiment:
 
             if render:
                 print('Save video.')
-                save_video(frames=frames, filename=f'{self._logdir}/videos/{track}-{timestep}', fps=25)
+                save_video(frames=frames, filename=f'{self._logdir}/videos/{track}-{timestep}', fps=100 // self._env_config.action_repeat)
         return max_progress
 
     def train(self, steps: int, agent: Agent, counter: Counter, logger: TensorBoardLogger):
