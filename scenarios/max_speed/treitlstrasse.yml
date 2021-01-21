@@ -1,0 +1,27 @@
+world:
+  name: treitlstrasse
+agents:
+  - id: A
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: max_speed
+  - id: B
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: max_speed
+  - id: C
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: max_speed
+  - id: D
+    vehicle:
+      name: racecar
+      sensors: [ lidar, pose, velocity, acceleration ]
+    task:
+      task_name: max_speed

@@ -34,6 +34,7 @@ class SingleAgentExperiment:
     @dataclass
     class EnvConfig:
         track: str
+        task: str
         action_repeat: int = 4
         training_time_limit: int = 2000
         eval_time_limit: int = 4000
@@ -81,7 +82,7 @@ class SingleAgentExperiment:
         return env
 
     def _make_env(self, tracks: List[str]):
-        scenarios = [SingleAgentScenario.from_spec(f'scenarios/{track}.yml', rendering=False) for track in tracks]
+        scenarios = [SingleAgentScenario.from_spec(f'scenarios/{self._env_config.task}/{track}.yml', rendering=False) for track in tracks]
         env = ChangingTrackSingleAgentRaceEnv(scenarios=scenarios, order='sequential')
         return env
 

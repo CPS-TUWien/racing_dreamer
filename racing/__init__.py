@@ -1,2 +1,2 @@
 
-from .experiments import max_progress
+from .experiments import __main__
