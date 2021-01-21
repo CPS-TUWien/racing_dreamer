@@ -10,7 +10,6 @@ RUN conda install python=3.6 tensorflow-gpu=2 tqdm
 RUN pip install keras-ncp
 # Update something to the bashrc (/etc/bashrc_skipper) to customize your shell
 RUN pip install pyfiglet
-RUN pip install pyyaml
 RUN echo -e "alias py='python'" >> /etc/bashrc_skipper
 FROM tensorflow/tensorflow:latest-gpu
 RUN apt update && apt install -y git wget libpython3.6
@@ -22,7 +21,7 @@ RUN wget https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/a
 RUN git clone https://github.com/axelbr/racecar_gym.git
 RUN pip install --user -e racecar_gym/
 RUN mv all.zip racecar_gym/models/scenes/ && cd racecar_gym/models/scenes/ && unzip all.zip
-#COPY . .
+COPY . .
 # Switch to src directory
 WORKDIR /src
 # Copy your code into the docker that is assumed to live in . (on machine)
