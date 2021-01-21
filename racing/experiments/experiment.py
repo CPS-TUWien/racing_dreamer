@@ -39,7 +39,7 @@ class SingleAgentExperiment:
         training_time_limit: int = 2000
         eval_time_limit: int = 4000
 
-    def __init__(self, env_config: EnvConfig, seed: int, logdir: str = 'logs/experiments'):
+    def __init__(self, env_config: EnvConfig, seed: int, logdir: str = '/data/logs/experiments'):
         self._set_seed(seed)
         self._train_tracks, self._test_tracks = [env_config.track], [env_config.track]
         self._logdir = logdir

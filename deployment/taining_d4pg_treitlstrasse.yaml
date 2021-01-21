@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: training_d4pg_treitlstrasse
+spec:
+  containers:
+    - name: skipper-pod
+      image: raminmh/acme_racing:latest
+      command:
+        - "/bin/bash"
+        - "-c" # run with bash and pass in the args below
+      args:
+        - "python -m racing.experiments.experiment.py \
+        --track treitlstrasse \
+        --agent d4pg \
+        --task max_progress \
+        --steps 2000000 \
+        --training_time_limit 2000 \
+        --eval_time_limit 4000 \
+        --eval_interval 10000 \
+        --action_repeat 4"
