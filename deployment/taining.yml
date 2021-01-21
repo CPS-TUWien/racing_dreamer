@@ -7,7 +7,7 @@ spec:
     - name: training-pod
       image: axelbr/training:latest
       command:
-        - "racing.experiments.max_progress"
+        - "/bin/bash"
         - "-c" # run with bash and pass in the args below
       args:
         - "python -m racing.experiments.max_progress \
