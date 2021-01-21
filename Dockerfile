@@ -10,6 +10,7 @@ RUN conda install python=3.6 tensorflow-gpu=2 tqdm
 RUN pip install keras-ncp
 # Update something to the bashrc (/etc/bashrc_skipper) to customize your shell
 RUN pip install pyfiglet
+RUN pip install pyyaml
 RUN echo -e "alias py='python'" >> /etc/bashrc_skipper
 FROM tensorflow/tensorflow:latest-gpu
 RUN apt update && apt install -y git wget libpython3.6
