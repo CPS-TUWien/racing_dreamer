@@ -1,2 +1,7 @@
+**/.git
+*.pyc
+
+log
+data
 venv
 experiments
