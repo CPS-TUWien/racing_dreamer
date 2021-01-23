@@ -9,13 +9,12 @@ from typing import Dict, Optional
 import subprocess
 import sys
 
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-install('pyyaml')
+#def install(package):
+#    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+#
+#install('pyyaml')
 
 import tensorflow as tf
-import yaml
 
 from racing.algorithms import make_mpo_agent
 from racing.algorithms.d4pg import make_d4pg_agent
@@ -27,7 +26,7 @@ def read_hyperparams(file: str) -> Dict:
         return yaml.safe_load(f)
 
 def choose_agent(name: str, param_file: Optional[str], checkpoint_path: str):
-    params = read_hyperparams(param_file) if param_file else {}
+    params = {} #read_hyperparams(param_file) if param_file else {}
     print(params.keys())
     if name == 'mpo':
         constructor = partial(make_mpo_agent, hyperparams=params, checkpoint_path=checkpoint_path)
@@ -44,11 +43,11 @@ def main(args):
     experiment_name = f'{args.track}_{args.agent}_{args.task}_{args.seed}_{timestamp}'
     logdir = f'logs/experiments/{experiment_name}'
 
-    if args.params is not None:
-        if not os.path.exists(logdir):
-            os.mkdir(logdir)
-        filename = os.path.basename(args.params).split('.')[0]
-        copyfile(src=args.params, dst=f'{logdir}/{filename}_{timestamp}.yml')
+    #if args.params is not None:
+    #    if not os.path.exists(logdir):
+    #        os.mkdir(logdir)
+    #    filename = os.path.basename(args.params).split('.')[0]
+    #    copyfile(src=args.params, dst=f'{logdir}/{filename}_{timestamp}.yml')
 
     checkpoint_path = f'{logdir}/checkpoints'
     env_config = SingleAgentExperiment.EnvConfig(
