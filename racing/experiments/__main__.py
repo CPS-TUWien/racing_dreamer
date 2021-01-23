@@ -6,6 +6,14 @@ from shutil import copyfile
 from time import time
 from typing import Dict, Optional
 
+import subprocess
+import sys
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+install('pyyaml')
+
 import tensorflow as tf
 import yaml
 
