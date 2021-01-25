@@ -8,10 +8,4 @@ RUN wget https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/a
 RUN git clone https://github.com/axelbr/racecar_gym.git
 RUN pip install --user -e racecar_gym/
 RUN mv all.zip racecar_gym/models/scenes/ && cd racecar_gym/models/scenes/ && unzip all.zip
-
 COPY . .
-
-# Switch to src directory
-WORKDIR /src
-# Copy your code into the docker that is assumed to live in . (on machine)
-COPY ./ /src
