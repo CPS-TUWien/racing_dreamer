@@ -25,7 +25,7 @@ def main(args):
 
     if args.params is not None:
         if not os.path.exists(logdir):
-            os.mkdir(logdir)
+            os.makedirs(logdir, exist_ok=True)
         filename = os.path.basename(args.params).split('.')[0]
         copyfile(src=args.params, dst=f'{logdir}/{filename}_{timestamp}.yml')
 
