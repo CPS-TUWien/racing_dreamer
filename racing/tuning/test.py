@@ -1,10 +1,8 @@
-from time import time
-
 from acme.agents.agent import Agent
 from dm_env import Environment
 import numpy as np
 
-from racing.experiments.common import run_episode
+from racing.experiments.acme.common import run_episode
 
 
 def test_episode(agent: Agent, env: Environment, action_repeat: int = 1):

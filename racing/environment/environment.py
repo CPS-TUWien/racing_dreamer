@@ -2,13 +2,11 @@ import dm_env
 import gym
 from acme import wrappers, specs, types
 from acme.wrappers import GymWrapper
-from racecar_gym import register_task
+import tasks
 from racecar_gym.envs import VectorizedMultiAgentRaceEnv, VectorizedSingleAgentRaceEnv, SingleAgentScenario, MultiAgentScenario
 
-from racing.environment.tasks import NStepProgress
 from racing.environment import wrap_env
 
-register_task('n_step_progress', NStepProgress)
 
 class MultiAgentGymWrapper(GymWrapper):
 
