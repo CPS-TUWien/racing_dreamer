@@ -1,21 +1,16 @@
 import functools
 import gc
 import sys
-import time
-from multiprocessing.context import Process
-from typing import Tuple, List
+from typing import Tuple
 import psutil
 import gym
 import optuna
 from acme import make_environment_spec
-from dm_env import Environment
 from optuna import Trial
 from optuna.integration import TensorBoardCallback
-from racecar_gym import SingleAgentScenario, SingleAgentRaceEnv, VectorizedSingleAgentRaceEnv
-from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 import numpy as np
 from racing.algorithms import make_mpo_agent
-from racing.logger import TensorBoardLogger, PrefixedTensorBoardLogger
+from racing.experiments.acme.logger import TensorBoardLogger, PrefixedTensorBoardLogger
 from racing.tuning import util
 from racing import experiments
 

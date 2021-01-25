@@ -1,15 +1,12 @@
 import os
-import warnings
 from typing import Union, Optional, Dict, Any, List
 
 import gym
-from acme.utils.loggers import Logger
 from stable_baselines3.common.callbacks import EventCallback, BaseCallback
-from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.vec_env import VecEnv, DummyVecEnv, sync_envs_normalization
+from stable_baselines3.common.vec_env import VecEnv, DummyVecEnv
 import numpy as np
 
-from racing.util import save_video
+from racing import save_video
 
 
 class EvalCallback(EventCallback):

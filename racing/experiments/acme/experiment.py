@@ -18,16 +18,12 @@ from gym.wrappers import TimeLimit, FilterObservation
 from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 
+from racing import save_video
 from racing.environment import InfoToObservation, FixedResetMode
-from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations, ReduceActionSpace
-from racing.logger import TensorBoardLogger, PrefixedTensorBoardLogger
+from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations
+from racing.experiments.acme.logger import TensorBoardLogger, PrefixedTensorBoardLogger
 
-def save_video(filename: str, frames, fps):
-    if not os.path.exists(os.path.dirname(filename)):
-        os.mkdir(os.path.dirname(filename))
-    with imageio.get_writer(f'{filename}.mp4', fps=fps) as video:
-        for frame in frames:
-            video.append_data(frame)
+
 
 
 class SingleAgentExperiment:
