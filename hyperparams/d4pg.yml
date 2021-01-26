@@ -11,5 +11,5 @@ samples_per_insert: 32.0
 n_step: 5
 clipping: True
 checkpoint: True
-max_replay_size: 1000000
+max_replay_size: 500000
 min_replay_size: 1000
