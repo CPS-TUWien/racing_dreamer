@@ -37,6 +37,7 @@ class EvalCallback(EventCallback):
         action_repeat: int = 4,
         callback_on_new_best: Optional[BaseCallback] = None,
         eval_freq: int = 10000,
+        render_freq: int = 50000,
         deterministic: bool = True,
         render: bool = False,
         verbose: int = 1,
@@ -44,6 +45,7 @@ class EvalCallback(EventCallback):
         super(EvalCallback, self).__init__(callback_on_new_best, verbose=verbose)
         self.action_repeat = action_repeat
         self.eval_freq = eval_freq
+        self.render_freq = render_freq
         self.best_mean_reward = -np.inf
         self.last_mean_reward = -np.inf
         self.deterministic = deterministic
@@ -76,6 +78,7 @@ class EvalCallback(EventCallback):
         dnf = dict([(track, False) for track in self.tracks])
 
         frames = []
+        rewards = 0
         for i in range(n_eval_episodes):
             # Avoid double reset, as VecEnv are reset automatically
             if not isinstance(self.eval_env, VecEnv) or i == 0:
@@ -86,6 +89,7 @@ class EvalCallback(EventCallback):
                 lidar_obs = obs['lidar']
                 action, state = self.model.predict(lidar_obs, state=state, deterministic=deterministic)
                 obs, reward, done, info = self.eval_env.step(action)
+                rewards += reward[0]
                 info = info[0]
                 if render and step % nth_frame == 0:
                     frames.append(self.eval_env.render(mode='birds_eye'))
@@ -102,18 +106,20 @@ class EvalCallback(EventCallback):
                     else:
                         max_progress[f'progress_{track}'] = max(max_progress[f'progress_{track}'], progress + lap - 1)
 
-        return max_progress, frames
+        return max_progress, frames, rewards
 
     def _on_step(self) -> bool:
         if self.eval_freq > 0 and self.n_calls % self.eval_freq == 0:
             for track in self.tracks:
                 nth_frame = 2
-                max_progress, frames = self._run_evaluation(n_eval_episodes=1, deterministic=True, track=track, render=True, nth_frame=nth_frame)
+                render = self.n_calls % self.render_freq == 0
+                max_progress, frames, rewards = self._run_evaluation(n_eval_episodes=1, deterministic=True, track=track, render=render, nth_frame=nth_frame)
 
-                if self.log_path is not None:
+                if render and self.log_path is not None:
                     save_video(filename=f'{self.log_path}/videos/{track}-{self.n_calls * self.action_repeat}', frames=frames, fps=(100 // (nth_frame * self.action_repeat)))
 
                 self.logger.record("test/progress", max_progress['progress'])
+                self.logger.record("test/reward", rewards)
         return True
 
     def update_child_locals(self, locals_: Dict[str, Any]) -> None:

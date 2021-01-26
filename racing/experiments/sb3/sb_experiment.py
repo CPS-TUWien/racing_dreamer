@@ -67,9 +67,10 @@ class SingleAgentExperiment:
                                      action_repeat=self._env_config.action_repeat,
                                      log_path=self._logdir,
                                      eval_freq=eval_every_steps // self._env_config.action_repeat,
+                                     render_freq=(10*eval_every_steps) // self._env_config.action_repeat,
                                      deterministic=True,
                                      render=True
                                      )
         print('Logging directory: ', self._logdir)
         model = agent_ctor(env=self.train_env, seed=self._seed, tensorboard_log=f'{self._logdir}')
-        model.learn(total_timesteps=steps, callback=[eval_callback])
+        model.learn(total_timesteps=steps, callback=[eval_callback], log_interval=1000)
