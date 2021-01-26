@@ -1,5 +1,5 @@
 learning_rate: 0.0003
-buffer_size: 1000000
+buffer_size: 500000
 learning_starts: 100
 policy_kwargs: {
   net_arch:

@@ -8,4 +8,4 @@ id,track,agent,task,runs,status
 7,columbia,sac,max_progress,0,running
 8,columbia,ppo,max_progress,0,running
 
-docker run --rm --gpus all -it -v $(pwd)/logs:/app/logs --network host racing:latest python run_experiments.py --track columbia --task max_progress --agent ppo --params hyperparams/ppo.yml --steps 4000000 --eval_interval 50000
+docker run --name exp_3 --gpus all -it -v $(pwd)/logs:/app/logs --network host racing:latest python run_experiments.py --track austria --task max_progress --agent sac --params hyperparams/sac.yml --steps 4000000 --eval_interval 50000
