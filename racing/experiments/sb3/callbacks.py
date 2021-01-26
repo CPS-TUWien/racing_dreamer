@@ -111,7 +111,7 @@ class EvalCallback(EventCallback):
                 max_progress, frames = self._run_evaluation(n_eval_episodes=1, deterministic=True, track=track, render=True, nth_frame=nth_frame)
 
                 if self.log_path is not None:
-                    save_video(filename=f'{self.log_path}/videos/{track}-{self.n_calls * self.action_repeat}.mp4', frames=frames, fps=(100 // (nth_frame * self.action_repeat)))
+                    save_video(filename=f'{self.log_path}/videos/{track}-{self.n_calls * self.action_repeat}', frames=frames, fps=(100 // (nth_frame * self.action_repeat)))
 
                 self.logger.record("test/progress", max_progress['progress'])
         return True

@@ -1,11 +1,11 @@
-track,agent,task,runs
-austria,mpo,max_progress,0
-austria,d4pg,max_progress,0
-austria,sac,max_progress,0
-austria,ppo,max_progress,0
-columbia,mpo,max_progress,0
-columbia,d4pg,max_progress,0
-columbia,sac,max_progress,0
-columbia,ppo,max_progress,0
+id,track,agent,task,runs,status
+1,austria,mpo,max_progress,0,todo
+2,austria,d4pg,max_progress,0,todo
+3,austria,sac,max_progress,0,running
+4,austria,ppo,max_progress,0,running
+5,columbia,mpo,max_progress,0,todo
+6,columbia,d4pg,max_progress,0,todo
+7,columbia,sac,max_progress,0,running
+8,columbia,ppo,max_progress,0,running
 
-docker run --rm --gpus all -it -v $(pwd)/logs:/logs --network host acme_racing:latest python  run_experiments.py --track austria --task max_progress --agent sac --params hyperparams/sac.yml --steps 4000000
+docker run --rm --gpus all -it -v $(pwd)/logs:/app/logs --network host racing:latest python run_experiments.py --track austria --task max_progress --agent sac --params hyperparams/sac.yml --steps 4000000
