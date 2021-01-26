@@ -2,7 +2,7 @@ from typing import Union, List, Dict
 import gym
 import yaml
 import gym.wrappers as gym_wrappers
-import racing.environment.environment as wrappers
+
 
 def wrap_env(env: gym.Env, wrapper_configs: Union[str, List[Dict]]) -> gym.Env:
     if isinstance(wrapper_configs, str):

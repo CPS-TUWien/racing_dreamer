@@ -2,10 +2,9 @@ import dm_env
 import gym
 from acme import wrappers, specs, types
 from acme.wrappers import GymWrapper
-import tasks
 from racecar_gym.envs import VectorizedMultiAgentRaceEnv, VectorizedSingleAgentRaceEnv, SingleAgentScenario, MultiAgentScenario
 
-from racing.environment import wrap_env
+
 
 
 class MultiAgentGymWrapper(GymWrapper):
@@ -44,14 +43,14 @@ def make_single_agent_env(scenario: str, render=False):
     env = wrappers.SinglePrecisionWrapper(env)
     return env
 
-def make_multi_agent_env(scenario: str, render=False, test=False):
-    scenario = MultiAgentScenario.from_spec(scenario, rendering=render)
-    env = VectorizedMultiAgentRaceEnv(scenarios=[scenario])
-    if test:
-        env = wrap_env(env=env, wrapper_configs='multi_agent_test_wrappers.yml')
-    else:
-        env = wrap_env(env=env, wrapper_configs='multi_agent_wrappers.yml')
-
-    env = MultiAgentGymWrapper(environment=env)
-    env = wrappers.SinglePrecisionWrapper(env)
-    return env
+# def make_multi_agent_env(scenario: str, render=False, test=False):
+#     scenario = MultiAgentScenario.from_spec(scenario, rendering=render)
+#     env = VectorizedMultiAgentRaceEnv(scenarios=[scenario])
+#     if test:
+#         env = wrap_env(env=env, wrapper_configs='multi_agent_test_wrappers.yml')
+#     else:
+#         env = wrap_env(env=env, wrapper_configs='multi_agent_wrappers.yml')
+#
+#     env = MultiAgentGymWrapper(environment=env)
+#     env = wrappers.SinglePrecisionWrapper(env)
+#     return env
