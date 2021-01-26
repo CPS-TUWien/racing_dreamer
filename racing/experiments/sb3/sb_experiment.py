@@ -70,5 +70,6 @@ class SingleAgentExperiment:
                                      deterministic=True,
                                      render=True
                                      )
-        model = agent_ctor(env=self.train_env, seed=self._seed, tensorboard_log=self._logdir)
+        print('Logging directory: ', self._logdir)
+        model = agent_ctor(env=self.train_env, seed=self._seed, tensorboard_log=f'{self._logdir}')
         model.learn(total_timesteps=steps, callback=[eval_callback])
