@@ -11,12 +11,14 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Update something to the bashrc (/etc/bashrc_skipper) to customize your shell
 RUN pip install pyfiglet
 RUN echo -e "alias py='python'" >> /etc/bashrc_skipper
-FROM tensorflow/tensorflow:latest-gpu
+# FROM tensorflow/tensorflow:latest-gpu
+RUN conda install python=3.6 tensorflow-gpu=2 tqdm
+
 RUN apt update && apt install -y git wget
-RUN pip install --user dm-acme\
-    && pip install --user dm-acme[jax]\
-    && pip install --user dm-acme[envs]\
-    && pip install --user dm-reverb jax tensorflow_probability trfl dm-sonnet imageio imageio-ffmpeg dataclasses pyyaml stable-baselines3[extra]
+RUN pip install dm-acme\
+    && pip install dm-acme[jax]\
+    && pip install dm-acme[envs]\
+    && pip install dm-reverb jax tensorflow_probability==0.11.0 trfl dm-sonnet imageio imageio-ffmpeg dataclasses pyyaml
 RUN wget https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/all.zip
 RUN git clone https://github.com/axelbr/racecar_gym.git
 RUN pip install --user -e racecar_gym/
