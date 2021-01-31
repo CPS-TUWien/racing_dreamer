@@ -8,4 +8,8 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     network_mode: host
+  tuning:
+    image: racing:pytorch
+
+
 

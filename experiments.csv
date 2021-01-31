@@ -1,16 +1,16 @@
 id,track,agent,task,runs,status
-1,austria,mpo,max_progress,2,running@frida
-2,austria,d4pg,max_progress,2,running@frida
-3,austria,sac,max_progress,0,running@pixi
-4,austria,ppo,max_progress,1,running@pixi
+1,austria,mpo,max_progress,2,todo
+2,austria,d4pg,max_progress,3,todo
+3,austria,sac,max_progress,1,todo
+4,austria,ppo,max_progress,2,todo
 5,columbia,mpo,max_progress,0,todo
 6,columbia,d4pg,max_progress,0,todo
-7,columbia,sac,max_progress,0,running@pixi
-8,columbia,ppo,max_progress,1,running@pixi
+7,columbia,sac,max_progress,1,todo
+8,columbia,ppo,max_progress,2,todo
 9,treitlstrasse,mpo,max_progress,0,todo
 10,treitlstrasse,d4pg,max_progress,0,todo
 11,treitlstrasse,sac,max_progress,0,running@pixi
-12,treitlstrasse,ppo,max_progress,1,running@pixi
+12,treitlstrasse,ppo,max_progress,2,todo
 
 
 python run_experiments.py --track columbia --task max_progress --agent mpo --params hyperparams/mpo.yml --steps 4000000 --eval_interval 20000

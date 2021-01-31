@@ -1,6 +1,6 @@
 **/.git
 *.pyc
-
+finished_experiments
 log
 data
 venv
