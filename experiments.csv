@@ -13,7 +13,14 @@ id,track,agent,task,runs,status
 12,treitlstrasse,ppo,max_progress,2,todo
 
 ./start_experiment.sh exp_1 austria mpo max_progress
-
-python run_experiments.py --track columbia --task max_progress --agent mpo --params hyperparams/mpo.yml --steps 4000000 --eval_interval 20000
-
-docker run --name exp_1 --gpus all -it -v $(pwd)/logs:/app/logs --network host racing:latest python run_experiments.py --track austria --task max_progress --agent mpo --params hyperparams/mpo.yml --steps 4000000 --eval_interval 20000
+./start_experiment.sh exp_2 austria d4pg max_progress
+./start_experiment.sh exp_3 austria sac max_progress
+./start_experiment.sh exp_4 austria ppo max_progress
+./start_experiment.sh exp_5 columbia mpo max_progress
+./start_experiment.sh exp_6 columbia d4pg max_progress
+./start_experiment.sh exp_7 columbia sac max_progress
+./start_experiment.sh exp_8 columbia ppo max_progress
+./start_experiment.sh exp_9 treitlstrasse mpo max_progress
+./start_experiment.sh exp_10 treitlstrasse d4pg max_progress
+./start_experiment.sh exp_11 treitlstrasse sac max_progress
+./start_experiment.sh exp_12 treitlstrasse ppo max_progress
