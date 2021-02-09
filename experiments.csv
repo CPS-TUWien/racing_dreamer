@@ -12,6 +12,7 @@ id,track,agent,task,runs,status
 11,treitlstrasse,sac,max_progress,0,running@pixi
 12,treitlstrasse,ppo,max_progress,2,todo
 
+./start_experiment.sh exp_1 austria mpo max_progress
 
 python run_experiments.py --track columbia --task max_progress --agent mpo --params hyperparams/mpo.yml --steps 4000000 --eval_interval 20000
 
