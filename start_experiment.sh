@@ -4,13 +4,13 @@ track=$2
 algorithm=$3
 task=$4
 params=hyperparams/$algorithm.yml
-steps=8000000
+steps=$5
 eval_interval=20000
 gpu=all
 
-if [[ ! -z "$5" ]]
+if [[ ! -z "$6" ]]
 then
-  gpu=$5
+  gpu=$6
 fi
 
 if [[ $algorithm == 'mpo' ]] || [[ $algorithm == 'd4pg' ]]
