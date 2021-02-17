@@ -71,15 +71,22 @@ class EvalCallback(EventCallback):
             os.makedirs(f'{self.log_path}/videos', exist_ok=True)
 
     def _run_evaluation(self, n_eval_episodes, deterministic, render, track, nth_frame=2):
-        if len(self.tracks) == 1:
-            max_progress = dict(progress=0)
-        else:
-            max_progress = dict([(f'progress_{track}', 0) for track in self.tracks])
-        dnf = dict([(track, False) for track in self.tracks])
 
+
+        if len(self.tracks) == 1:
+            max_progress_stats = dict(progress=[])
+        else:
+            max_progress_stats = dict([(f'progress_{track}', []) for track in self.tracks])
         frames = []
-        rewards = 0
+        reward_stats = []
         for i in range(n_eval_episodes):
+
+            rewards = 0
+            if len(self.tracks) == 1:
+                max_progress = dict(progress=0)
+            else:
+                max_progress = dict([(f'progress_{track}', 0) for track in self.tracks])
+            dnf = dict([(track, False) for track in self.tracks])
             # Avoid double reset, as VecEnv are reset automatically
             if not isinstance(self.eval_env, VecEnv) or i == 0:
                 obs = self.eval_env.reset()
@@ -91,7 +98,7 @@ class EvalCallback(EventCallback):
                 obs, reward, done, info = self.eval_env.step(action)
                 rewards += reward[0]
                 info = info[0]
-                if render and step % nth_frame == 0:
+                if render and step % nth_frame == 0 and i == 0:
                     frames.append(self.eval_env.render(mode='birds_eye'))
                 step += 1
 
@@ -105,21 +112,28 @@ class EvalCallback(EventCallback):
                         max_progress['progress'] = max(max_progress['progress'], progress + lap - 1)
                     else:
                         max_progress[f'progress_{track}'] = max(max_progress[f'progress_{track}'], progress + lap - 1)
+            reward_stats.append(rewards)
+            max_progress_stats['progress'].append(max_progress['progress'])
+        max_progress_stats['progress_mean'] = np.mean(max_progress_stats['progress'])
+        max_progress_stats['progress_std'] = np.std(max_progress_stats['progress'])
+        max_progress_stats['return_mean'] = np.mean(reward_stats)
+        max_progress_stats['return_std'] = np.std(reward_stats)
 
-        return max_progress, frames, rewards
+        del max_progress_stats['progress']
+        return max_progress_stats, frames, np.mean(reward_stats)
 
     def _on_step(self) -> bool:
         if self.eval_freq > 0 and self.n_calls % self.eval_freq == 0:
             for track in self.tracks:
                 nth_frame = 2
                 render = self.n_calls % self.render_freq == 0
-                max_progress, frames, rewards = self._run_evaluation(n_eval_episodes=1, deterministic=True, track=track, render=render, nth_frame=nth_frame)
+                max_progress, frames, rewards = self._run_evaluation(n_eval_episodes=10, deterministic=True, track=track, render=render, nth_frame=nth_frame)
 
                 if render and self.log_path is not None:
                     save_video(filename=f'{self.log_path}/videos/{track}-{self.n_calls * self.action_repeat}', frames=frames, fps=(100 // (nth_frame * self.action_repeat)))
 
-                self.logger.record("test/progress", max_progress['progress'])
-                self.logger.record("test/reward", rewards)
+                for k in max_progress:
+                    self.logger.record(f"test/{k}", max_progress[k])
         return True
 
     def update_child_locals(self, locals_: Dict[str, Any]) -> None:

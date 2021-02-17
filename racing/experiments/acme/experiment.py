@@ -110,37 +110,53 @@ class SingleAgentExperiment:
 
     def test(self, agent: Actor, timestep: int, render: bool = False):
         if len(self._test_tracks) == 1:
-            max_progress = dict(progress=0)
+            max_progress_stats = dict(progress=[])
         else:
-            max_progress = dict([(f'progress_{track}', 0) for track in self._test_tracks])
-        dnf = dict([(track, False) for track in self._test_tracks])
-        for track in self._test_tracks:
-            frames = []
-            step = self.test_env.reset()
-            agent.observe_first(timestep=step)
-            frames.append(self.test_env.gym_env.render(mode='birds_eye'))
-            while not step.last():
-                action = agent.select_action(observation=step.observation['lidar'])
-                step = self.test_env.step(action=action)
-                if render:
-                    frames.append(self.test_env.gym_env.render(mode='birds_eye'))
-                agent.observe(action=action, next_timestep=step._replace(observation=step.observation['lidar']))
+            max_progress_stats = dict([(f'progress_{track}', []) for track in self._test_tracks])
+        rewards = []
+        for test_run in range(10):
+            if len(self._test_tracks) == 1:
+                max_progress = dict(progress=0)
+            else:
+                max_progress = dict([(f'progress_{track}', 0) for track in self._test_tracks])
+            dnf = dict([(track, False) for track in self._test_tracks])
 
-                if step.observation['info_wrong_way'] and step.observation['info_progress'] > 0.9:
-                    dnf[track] = True
+            for track in self._test_tracks:
+                frames = []
+                step = self.test_env.reset()
+                agent.observe_first(timestep=step)
+                frames.append(self.test_env.gym_env.render(mode='birds_eye'))
+                reward = 0
+                while not step.last():
+                    action = agent.select_action(observation=step.observation['lidar'])
+                    step = self.test_env.step(action=action)
+                    if render and test_run==0:
+                        frames.append(self.test_env.gym_env.render(mode='birds_eye'))
+                    agent.observe(action=action, next_timestep=step._replace(observation=step.observation['lidar']))
+                    reward += step.reward
+                    if step.observation['info_wrong_way'] and step.observation['info_progress'] > 0.9:
+                        dnf[track] = True
 
-                if not dnf[track]:
-                    progress = step.observation['info_progress']
-                    lap = step.observation['info_lap']
-                    if len(self._test_tracks) == 1:
-                        max_progress['progress'] = max(max_progress['progress'], progress + lap - 1)
-                    else:
-                        max_progress[f'progress_{track}'] = max(max_progress[f'progress_{track}'], progress + lap - 1)
+                    if not dnf[track]:
+                        progress = step.observation['info_progress']
+                        lap = step.observation['info_lap']
+                        if len(self._test_tracks) == 1:
+                            max_progress['progress'] = max(max_progress['progress'], progress + lap - 1)
+                        else:
+                            max_progress[f'progress_{track}'] = max(max_progress[f'progress_{track}'], progress + lap - 1)
 
-            if render:
-                print('Save video.')
-                save_video(frames=frames, filename=f'{self._logdir}/videos/{track}-{timestep}', fps=100 // self._env_config.action_repeat)
-        return max_progress
+                if render and test_run == 0:
+                    print('Save video.')
+                    save_video(frames=frames, filename=f'{self._logdir}/videos/{track}-{timestep}', fps=100 // self._env_config.action_repeat)
+                max_progress_stats['progress'].append(max_progress['progress'])
+                rewards.append(reward)
+        max_progress_stats['progress_mean'] = np.mean(max_progress_stats['progress'])
+        max_progress_stats['progress_std'] = np.std(max_progress_stats['progress'])
+        max_progress_stats['return_mean'] = np.mean(rewards)
+        max_progress_stats['return_std'] = np.std(rewards)
+        del max_progress_stats['progress']
+
+        return max_progress_stats
 
     def train(self, steps: int, agent: Agent, counter: Counter, logger: TensorBoardLogger):
         t = 0
