@@ -32,4 +32,4 @@ echo "params: $params"
 echo "steps: $steps"
 echo "gpus: $gpu"
 
-docker run --name $name --gpus $gpu -d  -v $(pwd)/logs:/app/logs --network host axel/racing:$tag python3 run_experiments.py --track $track --task $task --agent $algorithm --params $params --steps $steps --eval_interval 2000
+docker run --name $name --gpus $gpu -d  -v $(pwd)/logs:/app/logs --network host axel/racing:$tag python3 run_experiments.py --track $track --task $task --agent $algorithm --params $params --steps $steps --eval_interval 20000
