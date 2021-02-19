@@ -1,9 +1,9 @@
-FROM ubuntu:18.04
-RUN apt update && apt install -y git wget unzip python3-pip
-RUN pip3 install --user imageio imageio-ffmpeg dataclasses pyyaml stable-baselines3 torch tensorboard optuna
+FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-runtime
+RUN apt update && apt install -y git wget unzip
+RUN pip install --user imageio imageio-ffmpeg dataclasses pyyaml stable-baselines3 tensorboard
 RUN wget https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/all.zip
 RUN git clone https://github.com/axelbr/racecar_gym.git
-RUN pip3 install --user -e racecar_gym/
+RUN pip install --user -e racecar_gym/
 RUN mv all.zip racecar_gym/models/scenes/ && cd racecar_gym/models/scenes/ && unzip all.zip
 WORKDIR /app
 COPY . .
