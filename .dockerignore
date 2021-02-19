@@ -5,3 +5,4 @@ log
 data
 venv
 experiments
+./logs/**
