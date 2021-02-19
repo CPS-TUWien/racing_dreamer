@@ -31,6 +31,7 @@ class EvalCallback(EventCallback):
 
     def __init__(
         self,
+        best_model_path: str,
         eval_env: Union[gym.Env, VecEnv],
         tracks: List[str],
         log_path: str = None,
@@ -50,6 +51,8 @@ class EvalCallback(EventCallback):
         self.last_mean_reward = -np.inf
         self.deterministic = deterministic
         self.render = render
+        self.best_mean_progress = -np.inf
+        self.best_model_path = best_model_path
 
         # Convert to VecEnv for consistency
         if not isinstance(eval_env, VecEnv):
@@ -118,6 +121,10 @@ class EvalCallback(EventCallback):
         max_progress_stats['progress_std'] = np.std(max_progress_stats['progress'])
         max_progress_stats['return_mean'] = np.mean(reward_stats)
         max_progress_stats['return_std'] = np.std(reward_stats)
+
+        if max_progress_stats['progress_mean'] > self.best_mean_progress:
+            self.model.save(path=self.best_model_path)
+            self.best_mean_progress = max_progress_stats['progress_mean']
 
         del max_progress_stats['progress']
         return max_progress_stats, frames, np.mean(reward_stats)

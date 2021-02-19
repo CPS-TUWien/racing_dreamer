@@ -62,7 +62,8 @@ class SingleAgentExperiment:
         return env
 
     def run(self,  steps: int, agent_ctor: Callable, eval_every_steps: int = 10000):
-        eval_callback = EvalCallback(eval_env=self.test_env,
+        eval_callback = EvalCallback(best_model_path=f'{self._logdir}/best_model',
+                                     eval_env=self.test_env,
                                      tracks=self._test_tracks,
                                      action_repeat=self._env_config.action_repeat,
                                      log_path=self._logdir,

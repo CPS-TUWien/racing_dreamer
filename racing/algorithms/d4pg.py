@@ -56,13 +56,14 @@ def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, checkpoint_
 
     observation_network = tf.identity
 
+    # Make sure observation network is a Sonnet Module.
+    observation_network = tf2_utils.to_sonnet_module(observation_network)
+
     actor = FeedForwardActor(policy_network=snt.Sequential([
         observation_network,
         policy_network
     ]))
 
-    # Make sure observation network is a Sonnet Module.
-    observation_network = tf2_utils.to_sonnet_module(observation_network)
 
     # Create optimizers.
     policy_optimizer = Adam(params.pop('policy_lr'))

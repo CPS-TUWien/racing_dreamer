@@ -1,7 +1,7 @@
 **/.git
 *.pyc
-finished_experiments
-log
+finished_experiments/**
+logs
 data
 venv
 experiments

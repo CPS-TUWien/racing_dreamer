@@ -8,6 +8,7 @@ import gym
 import imageio
 import numpy as np
 import tensorflow as tf
+from acme.tf import savers
 from acme import wrappers, make_environment_spec, Actor
 from acme.agents.agent import Agent
 from acme.specs import EnvironmentSpec
@@ -45,6 +46,7 @@ class SingleAgentExperiment:
         self.test_env = self._wrap_test(env=self._make_env(tracks=self._test_tracks))
         self._counter = Counter()
         self._counter.increment(steps=0)
+
 
 
     def _set_seed(self, seed):
@@ -94,14 +96,23 @@ class SingleAgentExperiment:
         env_spec = make_environment_spec(self.train_env)
         agent, eval_actor = agent_ctor(env_spec, train_logger)
 
+        model_snapshotter = savers.Snapshotter(objects_to_save={
+            'policy': eval_actor._policy_network
+        }, directory=self._logdir)
+
         t = self._counter.get_counts()['steps']
         iterations = 0
         render_interval = 5
+        best_mean_progress = -np.inf
         while t < steps:
             should_render = t >= render_interval * eval_every_steps * iterations
             if should_render:
                 iterations += 1
             test_result = self.test(eval_actor, render=should_render, timestep=t)
+            if test_result['progress_mean'] > best_mean_progress:
+                best_mean_progress = test_result['progress_mean']
+                model_snapshotter.save()
+
             test_logger.write(test_result, step=t)
             self.train(steps=eval_every_steps, agent=agent, counter=self._counter, logger=train_logger)
             t = self._counter.get_counts()['steps']
