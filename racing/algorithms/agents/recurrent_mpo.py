@@ -35,7 +35,7 @@ import sonnet as snt
 import tensorflow as tf
 
 
-class MPO(agent.Agent):
+class RecurrentMPO(agent.Agent):
   """MPO Agent.
 
   This implements a single-process MPO agent. This is an actor-critic algorithm
@@ -117,10 +117,11 @@ class MPO(agent.Agent):
 
     # The adder is used to insert observations into replay.
     address = f'localhost:{self._server.port}'
-    adder = adders.NStepTransitionAdder(
+    adder = adders.SequenceAdder(
         client=reverb.Client(address),
-        n_step=n_step,
-        discount=discount)
+        sequence_length=50,
+        period=50
+    )
 
     # The dataset object to learn from.
     dataset = datasets.make_reverb_dataset(
@@ -140,7 +141,9 @@ class MPO(agent.Agent):
     # Get observation and action specs.
     act_spec = environment_spec.actions
     obs_spec = environment_spec.observations
-    emb_spec = tf2_utils.create_variables(observation_network, [obs_spec, ])
+    state_spec = tf.TensorSpec(shape=(200,))
+    emb_spec = tf2_utils.create_variables(observation_network, [obs_spec])
+
 
     # Create the behavior policy.
     behavior_network = snt.Sequential([
@@ -149,13 +152,15 @@ class MPO(agent.Agent):
         networks.StochasticSamplingHead(),
     ])
 
+
+
     # Create variables.
     tf2_utils.create_variables(policy_network, [emb_spec])
     tf2_utils.create_variables(critic_network, [emb_spec, act_spec])
-    tf2_utils.create_variables(observation_network, [obs_spec])
+    tf2_utils.create_variables(observation_network, [obs_spec, state_spec])
     tf2_utils.create_variables(target_policy_network, [emb_spec])
     tf2_utils.create_variables(target_critic_network, [emb_spec, act_spec])
-    tf2_utils.create_variables(target_observation_network, [obs_spec])
+    tf2_utils.create_variables(target_observation_network, [obs_spec, state_spec])
 
     # Create the actor which defines how we take actions.
     actor = actors.FeedForwardActor(

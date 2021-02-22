@@ -3,6 +3,7 @@ from typing import Optional
 
 from racing.algorithms import make_mpo_agent
 from racing.algorithms.d4pg import make_d4pg_agent
+from racing.algorithms.lstm_mpo import make_lstm_mpo_agent
 from racing.experiments.acme.experiment import SingleAgentExperiment
 import tensorflow as tf
 physical_devices = tf.config.list_physical_devices('GPU')
@@ -19,6 +20,8 @@ def choose_agent(name: str, param_file: Optional[str], checkpoint_path: str):
         constructor = partial(make_mpo_agent, hyperparams=params, checkpoint_path=checkpoint_path)
     elif name == 'd4pg':
         constructor = partial(make_d4pg_agent, hyperparams=params, checkpoint_path=checkpoint_path)
+    elif name == 'lstm-mpo':
+        constructor = partial(make_lstm_mpo_agent, hyperparams=params, checkpoint_path=checkpoint_path)
     else:
         raise NotImplementedError(name)
     return constructor
