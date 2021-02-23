@@ -1,4 +1,5 @@
 FROM tensorflow/tensorflow:1.15.0-gpu-py3
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y git wget unzip python3-opencv
 RUN pip install --user stable-baselines imageio imageio-ffmpeg dataclasses pyyaml
 RUN wget https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/all.zip
