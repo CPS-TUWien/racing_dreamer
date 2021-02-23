@@ -130,8 +130,11 @@ def make_callback(version=3, **kwargs):
             max_progress_stats['return_std'] = np.std(reward_stats)
 
             if max_progress_stats['progress_mean'] > self.best_mean_progress:
-                self.model.policy.save(self.best_model_path)
-                #self.model.save(self.best_model_path)
+                print(self.model)
+                if version == 3:
+                    self.model.policy.save(self.best_model_path)
+                elif version == 2:
+                    self.model.save(self.best_model_path)
                 self.best_mean_progress = max_progress_stats['progress_mean']
 
             del max_progress_stats['progress']
