@@ -76,4 +76,4 @@ class SingleAgentExperiment:
                                       )
         print('Logging directory: ', self._logdir)
         model = agent_ctor(env=self.train_env, seed=self._seed, tensorboard_log=f'{self._logdir}')
-        model.learn(total_timesteps=steps, callback=[eval_callback])
+        model.learn(total_timesteps=steps // self._env_config.action_repeat, callback=[eval_callback])

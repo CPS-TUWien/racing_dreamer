@@ -152,7 +152,7 @@ def make_callback(version=3, **kwargs):
                             self.logger.record(f"test/{k}", max_progress[k])
                         else:
                             summary = tf.Summary(value=[tf.Summary.Value(tag=f'test/{k}', simple_value=max_progress[k])])
-                            self.locals['writer'].add_summary(summary, self.num_timesteps * self.action_repeat)
+                            self.locals['writer'].add_summary(summary, self.num_timesteps)
             return True
 
         def update_child_locals(self, locals_: Dict[str, Any]) -> None:
