@@ -1,0 +1,9 @@
+FROM tensorflow/tensorflow:1.15.0-gpu-py3
+RUN apt update && apt install -y git wget unzip
+RUN pip install --user stable-baselines imageio imageio-ffmpeg dataclasses pyyaml
+RUN wget https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/all.zip
+RUN git clone https://github.com/axelbr/racecar_gym.git
+RUN pip install --user -e racecar_gym/
+RUN mv all.zip racecar_gym/models/scenes/ && cd racecar_gym/models/scenes/ && unzip all.zip
+WORKDIR /app
+COPY . .

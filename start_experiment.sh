@@ -19,6 +19,9 @@ then
 elif [[ $algorithm == 'sac' ]] || [[ $algorithm == 'ppo' ]]
 then
     tag=sb3
+elif [[ $algorithm == 'lstm-ppo' ]]
+then
+    tag=sb2
 else
   echo "Not a valid algorithm."
   exit 1

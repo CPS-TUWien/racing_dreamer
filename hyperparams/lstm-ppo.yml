@@ -1,6 +1,6 @@
 learning_rate: 0.0003
 policy_kwargs: {
-  net_arch: [400, 'lstm', {pi: [400, 400, 400], vf: [400, 400]}]
+  net_arch: [200, 200, 'lstm', {pi: [400, 400, 400], vf: [400, 400]}]
 }
 batch_size: 64
 n_epochs: 10

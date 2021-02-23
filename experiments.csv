@@ -11,6 +11,10 @@ id,track,agent,task,runs,status
 10,treitlstrasse,d4pg,max_progress,0,todo
 11,treitlstrasse,sac,max_progress,0,running@pixi
 12,treitlstrasse,ppo,max_progress,2,todo
+13,austria,lstm-ppo,max_progress,2,todo
+14,columbia,lstm-ppo,max_progress,2,todo
+15,treitlstrasse,lstm-ppo,max_progress,2,todo
+
 
 ./start_experiment.sh exp_1 austria mpo max_progress 8000000
 ./start_experiment.sh exp_2 austria d4pg max_progress 8000000
