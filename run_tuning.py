@@ -28,11 +28,13 @@ def main(args):
     study = optuna.create_study(
         study_name=args.study_name,
         storage=args.storage,
-        pruner=optuna.pruners.SuccessiveHalvingPruner(),
-        sampler=optuna.samplers.TPESampler(n_startup_trials=4),
+        pruner=optuna.pruners.HyperbandPruner(min_resource=4),
+        sampler=optuna.samplers.TPESampler(),
         load_if_exists=True,
         direction='maximize'
     )
+
+    study.enqueue_trial(args.default_params)
     study.optimize(
         func=objective_fn,
         n_trials=args.trials,
@@ -63,7 +65,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if not args.storage:
+    if False and not args.storage:
         args.storage = f'mysql+pymysql://user:password@localhost/{args.study_name}'
 
     main(args)

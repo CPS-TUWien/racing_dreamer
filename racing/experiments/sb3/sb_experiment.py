@@ -66,23 +66,35 @@ class SingleAgentExperiment:
         return env
 
     def evaluate(self, model, env, n_eval_episodes: int, deterministic=True):
-        episode_rewards, episode_lengths = [], []
+
+        episode_rewards, episode_lengths, max_progresses = [], [], []
         for i in range(n_eval_episodes):
-            # Avoid double reset, as VecEnv are reset automatically
+            dnf = False
+            max_progress = 0
             obs = env.reset()
             done, state = False, None
             episode_reward = 0.0
             episode_length = 0
             while not done:
                 action, state = model.predict(obs['lidar'], state=state, deterministic=deterministic)
-                obs, reward, done, _info = env.step(action)
+                obs, reward, done, info = env.step(action)
                 episode_reward += reward
                 episode_length += 1
+
+                if info['wrong_way'] and info['progress'] > 0.9:
+                    dnf = True
+
+                if not dnf:
+                    progress = info['progress']
+                    lap = info['lap']
+                    max_progress = max(max_progress, progress + lap - 1)
+            max_progresses.append(max_progress)
             episode_rewards.append(episode_reward)
             episode_lengths.append(episode_length)
         mean_reward = np.mean(episode_rewards)
         std_reward = np.std(episode_rewards)
-        return mean_reward
+        print(f'Progress: {np.mean(max_progresses)} avg, {np.std(max_progresses)} std')
+        return np.mean(max_progresses)
 
     def run(self, steps: int, agent_ctor: Callable, eval_every_steps: int = 10000):
         eval_callback = make_callback(version=self._version,
@@ -107,5 +119,5 @@ class SingleAgentExperiment:
 
     def run_trial(self, agent, steps):
         agent.learn(steps)
-        results = self.evaluate(agent, self.test_env, n_eval_episodes=10)
+        results = self.evaluate(agent, self.test_env, n_eval_episodes=5)
         return results

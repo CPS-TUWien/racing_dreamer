@@ -123,13 +123,13 @@ class SingleAgentExperiment:
         self.train_env.environment.close()
         self.test_env.environment.close()
 
-    def test(self, agent: Actor, timestep: int, render: bool = False):
+    def test(self, agent: Actor, timestep: int, render: bool = False, eval_episodes=10):
         if len(self._test_tracks) == 1:
             max_progress_stats = dict(progress=[])
         else:
             max_progress_stats = dict([(f'progress_{track}', []) for track in self._test_tracks])
         rewards = []
-        for test_run in range(10):
+        for test_run in range(eval_episodes):
             if len(self._test_tracks) == 1:
                 max_progress = dict(progress=0)
             else:
@@ -222,5 +222,5 @@ class SingleAgentExperiment:
 
     def run_trial(self, agent, steps):
         self.train(steps=steps, agent=agent, counter=self._counter, logger=self._logger)
-        results = self.test(agent.eval_actor, timestep=0, render=False)
+        results = self.test(agent.eval_actor, timestep=0, render=False, eval_episodes=5)
         return results['progress_mean']
