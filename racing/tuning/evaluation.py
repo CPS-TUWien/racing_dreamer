@@ -2,6 +2,7 @@ import argparse
 import os
 
 import pandas
+import yaml
 import optuna
 from optuna.visualization import plot_intermediate_values, plot_optimization_history, plot_parallel_coordinate, \
     plot_slice, plot_param_importances
@@ -21,6 +22,13 @@ def main(args):
     logdir = f'logs/tuning/{study.study_name}'
     os.makedirs(logdir, exist_ok=True)
     make_plots(logdir=logdir, study=study)
+    study.trials_dataframe().to_csv(f'{logdir}/trials.csv')
+    with open(f'{logdir}/params.yml', 'w') as file:
+        results = dict(
+            best_params=study.best_params,
+            objective_value=study.best_value
+        )
+        yaml.safe_dump(results, file)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run hyperparameter tuning for a specified algorithm.')
