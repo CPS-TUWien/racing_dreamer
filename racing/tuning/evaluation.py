@@ -17,11 +17,7 @@ def make_plots(logdir, study):
     plot_slice(study).write_image(f'{logdir}/slices.svg')
     plot_param_importances(study).write_image(f'{logdir}/importances.svg')
 
-def main(args):
-    study = optuna.load_study(study_name=args.study_name, storage=args.storage)
-    logdir = f'logs/tuning/{study.study_name}'
-    os.makedirs(logdir, exist_ok=True)
-    make_plots(logdir=logdir, study=study)
+def write_data(logdir, study):
     study.trials_dataframe().to_csv(f'{logdir}/trials.csv')
     with open(f'{logdir}/params.yml', 'w') as file:
         results = dict(
@@ -29,6 +25,15 @@ def main(args):
             objective_value=study.best_value
         )
         yaml.safe_dump(results, file)
+
+def main(args):
+    study = optuna.load_study(study_name=args.study_name, storage=args.storage)
+    logdir = f'logs/tuning/{study.study_name}'
+    os.makedirs(logdir, exist_ok=True)
+    make_plots(logdir=logdir, study=study)
+    write_data(logdir=logdir, study=study)
+
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run hyperparameter tuning for a specified algorithm.')
