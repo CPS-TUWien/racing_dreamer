@@ -1,4 +1,9 @@
 #!/bin/bash
+
+study=$1
+algorithm=$2
+instances=$3
+
 algorithm=$2
 if [[ $algorithm == 'mpo' ]] || [[ $algorithm == 'd4pg' ]]
 then
@@ -13,12 +18,22 @@ else
   echo "Not a valid algorithm."
   exit 1
 fi
+
 export LABEL=$tag
-export STUDY=$1
+export STUDY=$study
 export AGENT=$algorithm
 export TRACK=austria
 export STEPS=100000
 export EPOCHS=10
 export TRIALS=50
 export LOGDIR=$(pwd)/logs/tuning/
-docker-compose -f docker/study-compose.yml up  -d --scale tuning=$3 database tuning
+
+echo $tag
+echo $study
+echo $algorithm
+echo $LOGDIR
+docker-compose -f docker/study-compose.yml up -d database
+sleep 2
+docker-compose -f docker/study-compose.yml up -d tuning
+sleep 1
+docker-compose -f docker/study-compose.yml up -d --scale tuning=$instances database tuning
