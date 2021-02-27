@@ -1,7 +1,9 @@
 **/.git
 *.pyc
 finished_experiments/**
-logs
+logs/
+*.tar
+*.tar.gz
 data
 venv
 experiments
