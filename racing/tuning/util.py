@@ -1,11 +1,11 @@
-from dm_env import Environment
 from gym import Env
 import gym.wrappers as gym_wrappers
-import acme.wrappers as acme_wrappers
-from racing.environment import single_agent as wrappers, FixedResetMode
+from optuna import Trial
+
+from racing.environment import single_agent as wrappers
 
 import os
-from typing import Dict
+from typing import Dict, List
 
 import optuna
 from optuna._experimental import experimental
@@ -23,17 +23,6 @@ def _common_wrappers(env: Env):
     env = wrappers.Flatten(env, flatten_obs=True, flatten_actions=True)
     env = wrappers.NormalizeObservations(env)
     return env
-
-def wrap(env: Env, time_limit: int, reset_mode: str) -> Environment:
-    env = _common_wrappers(env)
-    env = FixedResetMode(env, mode=reset_mode)
-    env = gym_wrappers.TimeLimit(env, max_episode_steps=time_limit)
-    env = acme_wrappers.GymWrapper(environment=env)
-    env = acme_wrappers.SinglePrecisionWrapper(env)
-    return env
-
-
-
 
 
 @experimental("2.0.0")
@@ -125,3 +114,15 @@ class TensorBoardCallback(object):
         ]
         for trial in completed_trials:
             self._add_distributions(trial.distributions)
+
+
+def get_params(trial: Trial, tunable_params: Dict, default_params: Dict):
+    defaults = default_params.copy()
+    for key in tunable_params:
+        args = tunable_params[key]
+        if isinstance(args, List) and isinstance(args[0], float):
+            low, high = args[0], args[1]
+            defaults[key] = trial.suggest_float(name=key, low=low, high=high)
+    return defaults
+
+

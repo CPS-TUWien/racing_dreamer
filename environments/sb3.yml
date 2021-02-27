@@ -1,9 +1,0 @@
-name: stable-baselines3
-dependencies:
-  - python=3.7
-  - pytorch-gpu
-  - pip:
-    - stable-baselines3
-    - imageio
-    - imageio-ffmpeg
-    - "--editable=git+https://github.com/axelbr/racecar_gym#egg=racecar_gym"

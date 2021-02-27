@@ -1,0 +1,8 @@
+learning_rate: 0.0003
+policy_kwargs: {
+  net_arch: [200, 200, 'lstm', {pi: [400, 400, 400], vf: [400, 400]}]
+}
+gamma: 0.99
+ent_coef: 0.0
+vf_coef: 0.5
+max_grad_norm: 0.5

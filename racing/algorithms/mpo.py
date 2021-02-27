@@ -77,7 +77,7 @@ def make_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams:
     ]))
 
     # The learner updates the parameters (and initializes them).
-    return MPO(
+    agent = MPO(
         environment_spec=env_spec,
         policy_network=policy_network,
         critic_network=critic_network,
@@ -88,4 +88,6 @@ def make_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperparams:
         logger=logger,
         checkpoint_path=checkpoint_path,
         **params
-    ), actor
+    )
+    agent.__setattr__('eval_actor', actor)
+    return agent

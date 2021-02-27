@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Optional
+from typing import Optional, Dict
 
 from racing.experiments.sb3.sb_experiment import SingleAgentExperiment as Sb3Experiment
 
@@ -8,7 +8,15 @@ from racing.experiments.util import read_hyperparams
 
 
 def choose_agent(name: str, param_file: Optional[str], checkpoint_path: str):
-    params = read_hyperparams(param_file) if param_file else {}
+    if param_file:
+        if isinstance(param_file, str):
+            params = read_hyperparams(param_file)
+        elif isinstance(param_file, Dict):
+            params = param_file
+        else:
+            params = {}
+    else:
+        params = {}
     if name == 'sac':
         from stable_baselines3.sac import SAC
         constructor = partial(SAC, policy='MlpPolicy', verbose=1, **params)

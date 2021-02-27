@@ -70,7 +70,7 @@ def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, checkpoint_
     critic_optimizer = Adam(params.pop('critic_lr'))
 
     # The learner updates the parameters (and initializes them).
-    return D4PG(
+    agent = D4PG(
         environment_spec=env_spec,
         policy_network=policy_network,
         critic_network=critic_network,
@@ -80,4 +80,6 @@ def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, checkpoint_
         logger=logger,
         checkpoint_path=checkpoint_path,
         **params
-    ), actor
+    )
+    agent.__setattr__('eval_actor', actor)
+    return agent

@@ -1,6 +1,7 @@
 import os
 import random
 from dataclasses import dataclass
+from time import time
 from typing import List, Callable
 
 import gym
@@ -8,6 +9,7 @@ import numpy as np
 from gym.wrappers import TimeLimit, FilterObservation
 from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
+from stable_baselines3.common.evaluation import evaluate_policy
 
 from racing.environment import FixedResetMode
 from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations
@@ -24,6 +26,7 @@ class SingleAgentExperiment:
         eval_time_limit: int = 4000
 
     def __init__(self, env_config: EnvConfig, seed: int, logdir: str = '/data/logs/experiments', version=3):
+
         self._set_seed(seed)
         self._train_tracks, self._test_tracks = [env_config.track], [env_config.track]
         self._logdir = logdir
@@ -62,6 +65,25 @@ class SingleAgentExperiment:
         env = ChangingTrackSingleAgentRaceEnv(scenarios=scenarios, order='sequential')
         return env
 
+    def evaluate(self, model, env, n_eval_episodes: int, deterministic=True):
+        episode_rewards, episode_lengths = [], []
+        for i in range(n_eval_episodes):
+            # Avoid double reset, as VecEnv are reset automatically
+            obs = env.reset()
+            done, state = False, None
+            episode_reward = 0.0
+            episode_length = 0
+            while not done:
+                action, state = model.predict(obs['lidar'], state=state, deterministic=deterministic)
+                obs, reward, done, _info = env.step(action)
+                episode_reward += reward
+                episode_length += 1
+            episode_rewards.append(episode_reward)
+            episode_lengths.append(episode_length)
+        mean_reward = np.mean(episode_rewards)
+        std_reward = np.std(episode_rewards)
+        return mean_reward
+
     def run(self, steps: int, agent_ctor: Callable, eval_every_steps: int = 10000):
         eval_callback = make_callback(version=self._version,
                                       best_model_path=f'{self._logdir}/best_model',
@@ -75,5 +97,15 @@ class SingleAgentExperiment:
                                       render=True
                                       )
         print('Logging directory: ', self._logdir)
-        model = agent_ctor(env=self.train_env, seed=self._seed, tensorboard_log=f'{self._logdir}')
-        model.learn(total_timesteps=steps // self._env_config.action_repeat, callback=[eval_callback])
+        model = self.configure_agent(agent_ctor)
+        print('start learning')
+        model.learn(total_timesteps=steps, callback=[eval_callback])
+
+    def configure_agent(self, agent_ctor):
+        return agent_ctor(env=self.train_env, seed=self._seed, tensorboard_log=f'{self._logdir}')
+
+
+    def run_trial(self, agent, steps):
+        agent.learn(steps)
+        results = self.evaluate(agent, self.test_env, n_eval_episodes=10)
+        return results

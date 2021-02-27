@@ -12,7 +12,10 @@ from acme.tf import networks, losses
 from acme.utils.loggers import Logger
 from sonnet.src.optimizers.adam import Adam
 from acme.tf import utils as tf2_utils
+
+from .actors import RecurrentActor
 from .agents import RecurrentMPO
+
 import tensorflow as tf
 
 DEFAULT_PARAMS = dict(
@@ -29,11 +32,11 @@ DEFAULT_PARAMS = dict(
     loss_init_log_alpha_mean=1.,
     loss_init_log_alpha_stddev=10.,
     discount=0.99,
-    batch_size=256,
+    batch_size=50,
+    sequence_length=100,
     target_policy_update_period=100,
     target_critic_update_period=100,
     samples_per_insert=32.0,
-    n_step=5,
     num_samples=20,
     clipping=True,
     checkpoint=True,
@@ -56,7 +59,7 @@ def make_lstm_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperpa
         )
     ])
 
-    observation_network = snt.Sequential([
+    observation_network = networks.DeepRNN([
         networks.LayerNormMLP(layer_sizes=params.pop('observation_layers')),
         networks.LSTM(hidden_size=200)
     ])
@@ -74,7 +77,7 @@ def make_lstm_mpo_agent(env_spec: specs.EnvironmentSpec, logger: Logger, hyperpa
     policy_optimizer = Adam(params.pop('policy_lr'))
     critic_optimizer = Adam(params.pop('critic_lr'))
 
-    actor = FeedForwardActor(policy_network=snt.Sequential([
+    actor = RecurrentActor(networks.DeepRNN([
         observation_network,
         policy_network,
         networks.StochasticModeHead()

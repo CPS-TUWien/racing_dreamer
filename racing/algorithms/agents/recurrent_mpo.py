@@ -25,6 +25,8 @@ from acme import types
 from acme.adders import reverb as adders
 from acme.agents import agent
 from acme.agents.tf import actors
+
+from ..actors import RecurrentActor
 from ..learners import MPOLearner
 from acme.tf import networks
 from acme.tf import utils as tf2_utils
@@ -33,6 +35,8 @@ from acme.utils import loggers
 import reverb
 import sonnet as snt
 import tensorflow as tf
+
+from ..learners.recurrent_mpo import RecurrentMPOLearner
 
 
 class RecurrentMPO(agent.Agent):
@@ -52,7 +56,8 @@ class RecurrentMPO(agent.Agent):
       critic_network: snt.Module,
       observation_network: types.TensorTransformation = tf.identity,
       discount: float = 0.99,
-      batch_size: int = 256,
+      batch_size: int = 50,
+      sequence_length: int = 50,
       prefetch_size: int = 4,
       target_policy_update_period: int = 100,
       target_critic_update_period: int = 100,
@@ -62,7 +67,6 @@ class RecurrentMPO(agent.Agent):
       policy_loss_module: snt.Module = None,
       policy_optimizer: snt.Optimizer = None,
       critic_optimizer: snt.Optimizer = None,
-      n_step: int = 5,
       num_samples: int = 20,
       clipping: bool = True,
       logger: loggers.Logger = None,
@@ -107,20 +111,20 @@ class RecurrentMPO(agent.Agent):
 
     # Create a replay server to add data to.
     replay_table = reverb.Table(
-        name=adders.DEFAULT_PRIORITY_TABLE,
+        name=replay_table_name,
         sampler=reverb.selectors.Uniform(),
         remover=reverb.selectors.Fifo(),
         max_size=max_replay_size,
         rate_limiter=reverb.rate_limiters.MinSize(min_size_to_sample=1),
-        signature=adders.NStepTransitionAdder.signature(environment_spec))
+        signature=adders.SequenceAdder.signature(environment_spec))
     self._server = reverb.Server([replay_table], port=None)
 
     # The adder is used to insert observations into replay.
     address = f'localhost:{self._server.port}'
     adder = adders.SequenceAdder(
         client=reverb.Client(address),
-        sequence_length=50,
-        period=50
+        sequence_length=sequence_length,
+        period=sequence_length
     )
 
     # The dataset object to learn from.
@@ -128,6 +132,7 @@ class RecurrentMPO(agent.Agent):
         table=replay_table_name,
         server_address=address,
         batch_size=batch_size,
+        sequence_length=sequence_length,
         prefetch_size=prefetch_size)
 
     # Make sure observation network is a Sonnet Module.
@@ -142,11 +147,9 @@ class RecurrentMPO(agent.Agent):
     act_spec = environment_spec.actions
     obs_spec = environment_spec.observations
     state_spec = tf.TensorSpec(shape=(200,))
-    emb_spec = tf2_utils.create_variables(observation_network, [obs_spec])
-
 
     # Create the behavior policy.
-    behavior_network = snt.Sequential([
+    behavior_network = networks.DeepRNN([
         observation_network,
         policy_network,
         networks.StochasticSamplingHead(),
@@ -155,15 +158,17 @@ class RecurrentMPO(agent.Agent):
 
 
     # Create variables.
-    tf2_utils.create_variables(policy_network, [emb_spec])
-    tf2_utils.create_variables(critic_network, [emb_spec, act_spec])
-    tf2_utils.create_variables(observation_network, [obs_spec, state_spec])
-    tf2_utils.create_variables(target_policy_network, [emb_spec])
-    tf2_utils.create_variables(target_critic_network, [emb_spec, act_spec])
-    tf2_utils.create_variables(target_observation_network, [obs_spec, state_spec])
+    emb_spec, state_spec = tf2_utils.create_variables(observation_network, [obs_spec])
+    state_spec = state_spec[0]
+    policy_out = tf2_utils.create_variables(policy_network, [state_spec.hidden])
+    value_out = tf2_utils.create_variables(critic_network, [state_spec.hidden, act_spec])
+
+    tf2_utils.create_variables(target_observation_network, [obs_spec])
+    tf2_utils.create_variables(target_policy_network, [state_spec.hidden])
+    tf2_utils.create_variables(target_critic_network, [state_spec.hidden, act_spec])
 
     # Create the actor which defines how we take actions.
-    actor = actors.FeedForwardActor(
+    actor = RecurrentActor(
         policy_network=behavior_network, adder=adder)
 
     # Create optimizers.
@@ -171,7 +176,7 @@ class RecurrentMPO(agent.Agent):
     critic_optimizer = critic_optimizer or snt.optimizers.Adam(1e-4)
 
     # The learner updates the parameters (and initializes them).
-    learner = MPOLearner(
+    learner = RecurrentMPOLearner(
         policy_network=policy_network,
         critic_network=critic_network,
         observation_network=observation_network,

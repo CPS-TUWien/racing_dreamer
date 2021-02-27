@@ -1,6 +1,5 @@
 import os
 import random
-from collections import defaultdict
 from dataclasses import dataclass
 from time import time
 from typing import List, Callable, Tuple
@@ -37,13 +36,11 @@ class SingleAgentExperiment:
         training_time_limit: int = 2000
         eval_time_limit: int = 4000
 
-    def __init__(self, env_config: EnvConfig, seed: int, logdir: str = None):
+    def __init__(self, env_config: EnvConfig, seed: int, logdir: str = '/data/logs/experiments'):
         self._set_seed(seed)
         self._train_tracks, self._test_tracks = [env_config.track], [env_config.track]
         self._logdir = logdir
         self._logger = TensorBoardLogger(logdir=self._logdir)
-        self.train_logger = PrefixedTensorBoardLogger(base_logger=self._logger, prefix='train')
-        self.test_logger = PrefixedTensorBoardLogger(base_logger=self._logger, prefix='test')
         self._env_config = env_config
         self.train_env = self._wrap_training(self._make_env(tracks=self._train_tracks))
         self.test_env = self._wrap_test(env=self._make_env(tracks=self._test_tracks))
@@ -87,21 +84,20 @@ class SingleAgentExperiment:
         env = ChangingTrackSingleAgentRaceEnv(scenarios=scenarios, order='sequential')
         return env
 
-    def configure_agent(self, agent_ctor):
-        return agent_ctor(make_environment_spec(self.train_env), self.train_logger)
-
     def run(self,
             steps: int,
             agent_ctor: Callable[[EnvironmentSpec, Logger], Tuple[Agent, Actor]],
             eval_every_steps: int = 10000
             ):
 
+        train_logger = PrefixedTensorBoardLogger(base_logger=self._logger, prefix='train')
+        test_logger = PrefixedTensorBoardLogger(base_logger=self._logger, prefix='test')
 
-        agent = self.configure_agent(agent_ctor)
-        eval_actor = agent.eval_actor
+        env_spec = make_environment_spec(self.train_env)
+        agent, eval_actor = agent_ctor(env_spec, train_logger)
 
         model_snapshotter = savers.Snapshotter(objects_to_save={
-            'policy': eval_actor._policy_network
+            'policy': eval_actor._network
         }, directory=self._logdir)
 
         t = self._counter.get_counts()['steps']
@@ -117,8 +113,8 @@ class SingleAgentExperiment:
                 best_mean_progress = test_result['progress_mean']
                 model_snapshotter.save()
 
-            self.test_logger.write(test_result, step=t)
-            self.train(steps=eval_every_steps, agent=agent, counter=self._counter, logger=self.train_logger)
+            test_logger.write(test_result, step=t)
+            self.train(steps=eval_every_steps, agent=agent, counter=self._counter, logger=train_logger)
             t = self._counter.get_counts()['steps']
         self.train_env.environment.close()
         self.test_env.environment.close()
@@ -219,8 +215,3 @@ class SingleAgentExperiment:
             'steps_per_second': steps_per_second,
         }
         return result
-
-    def run_trial(self, agent, steps):
-        self.train(steps=steps, agent=agent, counter=self._counter, logger=self._logger)
-        results = self.test(agent.eval_actor, timestep=0, render=False)
-        return results['progress_mean']

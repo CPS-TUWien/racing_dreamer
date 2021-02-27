@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Optional
+from typing import Optional, Union, Dict
 
 from racing.algorithms import make_mpo_agent
 from racing.algorithms.d4pg import make_d4pg_agent
@@ -13,8 +13,16 @@ for device in physical_devices:
 from racing.experiments.util import read_hyperparams
 
 
-def choose_agent(name: str, param_file: Optional[str], checkpoint_path: str):
-    params = read_hyperparams(param_file) if param_file else {}
+def choose_agent(name: str, param_file: Union[Optional[str], Dict], checkpoint_path: str):
+    if param_file:
+        if isinstance(param_file, str):
+            params = read_hyperparams(param_file)
+        elif isinstance(param_file, Dict):
+            params = param_file
+        else:
+            params = {}
+    else:
+        params ={}
     print(params.keys())
     if name == 'mpo':
         constructor = partial(make_mpo_agent, hyperparams=params, checkpoint_path=checkpoint_path)

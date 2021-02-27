@@ -23,5 +23,5 @@ do
   echo "Running exp_$exp"
   docker container rm "exp_$exp"
   index=$(($exp-1))
-  ./start_experiment.sh exp_$exp ${args[$index]}
+  ./start_experiment.sh exp_$exp $(echo ${args[$index]})
 done
