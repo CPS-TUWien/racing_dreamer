@@ -51,7 +51,7 @@ def make_d4pg_agent(env_spec: specs.EnvironmentSpec, logger: Logger, checkpoint_
         networks.CriticMultiplexer(
             critic_network=networks.LayerNormMLP(layer_sizes=[*params.pop('critic_layers'), 1])
         ),
-        networks.DiscreteValuedHead(vmin=0., vmax=100.0, num_atoms=params.pop('atoms'))
+        networks.DiscreteValuedHead(vmin=-100.0, vmax=100.0, num_atoms=params.pop('atoms'))
     ])
 
     observation_network = tf.identity

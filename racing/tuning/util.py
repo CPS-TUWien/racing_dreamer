@@ -120,9 +120,7 @@ def get_params(trial: Trial, tunable_params: Dict, default_params: Dict):
     defaults = default_params.copy()
     for key in tunable_params:
         args = tunable_params[key]
-        if isinstance(args, List) and isinstance(args[0], float):
-            low, high = args[0], args[1]
-            defaults[key] = trial.suggest_float(name=key, low=low, high=high)
+        defaults[key] = trial.suggest_float(name=key, **args)
     return defaults
 
 

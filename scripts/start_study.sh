@@ -1,10 +1,24 @@
 #!/bin/bash
-export LABEL=sb3
-export STUDY=teststudy
-export AGENT=ppo
+algorithm=$2
+if [[ $algorithm == 'mpo' ]] || [[ $algorithm == 'd4pg' ]]
+then
+    tag=acme
+elif [[ $algorithm == 'sac' ]] || [[ $algorithm == 'ppo' ]]
+then
+    tag=sb3
+elif [[ $algorithm == 'lstm-ppo' ]]
+then
+    tag=sb2
+else
+  echo "Not a valid algorithm."
+  exit 1
+fi
+export LABEL=$tag
+export STUDY=$1
+export AGENT=$algorithm
 export TRACK=austria
-export STEPS=1000
-export EPOCHS=2
-export TRIALS=2
+export STEPS=100000
+export EPOCHS=10
+export TRIALS=50
 export LOGDIR=$(pwd)/logs/tuning/
-docker-compose -f docker/study-compose.yml up  -d --scale tuning=$1 database tuning
+docker-compose -f docker/study-compose.yml up  -d --scale tuning=$3 database tuning
