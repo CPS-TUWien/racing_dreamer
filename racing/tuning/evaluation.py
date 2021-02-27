@@ -1,0 +1,35 @@
+import argparse
+import os
+
+import pandas
+import optuna
+from optuna.visualization import plot_intermediate_values, plot_optimization_history, plot_parallel_coordinate, \
+    plot_slice, plot_param_importances
+
+
+def make_plots(logdir, study):
+    logdir = f'{logdir}/plots'
+    os.makedirs(logdir, exist_ok=True)
+    plot_optimization_history(study).write_image(f'{logdir}/history.svg')
+    plot_intermediate_values(study).write_image(f'{logdir}/intermediates.svg')
+    plot_parallel_coordinate(study).write_image(f'{logdir}/parallel_coordinates.png')
+    plot_slice(study).write_image(f'{logdir}/slices.svg')
+    plot_param_importances(study).write_image(f'{logdir}/importances.svg')
+
+def main(args):
+    study = optuna.load_study(study_name=args.study_name, storage=args.storage)
+    logdir = f'logs/tuning/{study.study_name}'
+    os.makedirs(logdir, exist_ok=True)
+    make_plots(logdir=logdir, study=study)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Run hyperparameter tuning for a specified algorithm.')
+    parser.add_argument('--study_name', type=str, required=True)
+    parser.add_argument('--storage', type=str, required=False)
+    parser.add_argument('--path', type=str, default='.')
+    args = parser.parse_args()
+
+    if not args.storage:
+        args.storage = f'mysql+pymysql://user:password@localhost/{args.study_name}'
+
+    main(args)

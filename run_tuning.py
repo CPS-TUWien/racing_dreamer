@@ -64,7 +64,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if not args.storage:
-        args.storage = f'mysql+pymysql://user:password@localhost/{args.study_name}'
 
     main(args)

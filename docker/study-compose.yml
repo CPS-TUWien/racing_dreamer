@@ -21,12 +21,5 @@ services:
     volumes:
       - ${LOGDIR}/${STUDY}/logs:/app/logs/tuning/
 
-  report:
-    image: axel/racing:sb3
-    command: python racing/tuning/export.py --study_name ${STUDY} --path exports
-    network_mode: host
-    volumes:
-      - ${LOGDIR}/${STUDY}:/app/exports
-
 volumes:
   mysql_volume:

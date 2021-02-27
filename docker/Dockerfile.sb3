@@ -1,6 +1,6 @@
 FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-runtime
 RUN apt update && apt install -y git wget unzip
-RUN pip install --user imageio imageio-ffmpeg dataclasses pyyaml stable-baselines3 tensorboard numpy==1.17.4 optuna pymysql
+RUN pip install --user imageio imageio-ffmpeg dataclasses pyyaml stable-baselines3 tensorboard numpy==1.17.4 optuna pymysql plotly kaleido
 RUN wget https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/all.zip
 RUN git clone https://github.com/axelbr/racecar_gym.git
 RUN pip install --user -e racecar_gym/
