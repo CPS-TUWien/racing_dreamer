@@ -6,7 +6,6 @@ from shutil import copyfile
 from time import time
 
 import optuna
-from optuna.integration import TensorBoardCallback
 
 from racing.experiments.util import read_hyperparams
 from racing.tuning.objective import objective
