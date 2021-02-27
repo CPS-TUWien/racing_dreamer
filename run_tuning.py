@@ -13,13 +13,13 @@ from racing.tuning.objective import objective
 
 def main(args):
     timestamp = time()
-    args.logdir = f'logs/tuning/{args.study_name}'
+    logdir = f'logs/tuning'
 
     if args.default_params is not None:
-        if not os.path.exists(args.logdir):
-            os.makedirs(args.logdir, exist_ok=True)
+        if not os.path.exists(logdir):
+            os.makedirs(logdir, exist_ok=True)
         filename = os.path.basename(args.default_params).split('.')[0]
-        copyfile(src=args.default_params, dst=f'{args.logdir}/{filename}_{timestamp}.yml')
+        copyfile(src=args.default_params, dst=f'{logdir}/{filename}_{timestamp}.yml')
 
     args.default_params = read_hyperparams(args.default_params)
     args.tunable_params = read_hyperparams(args.tunable_params)

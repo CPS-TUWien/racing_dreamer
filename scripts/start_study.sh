@@ -26,7 +26,7 @@ export TRACK=austria
 export STEPS=100000
 export EPOCHS=10
 export TRIALS=50
-export LOGDIR=$(pwd)/logs/tuning/$study
+export LOGDIR=$(pwd)/logs/tuning
 
 echo $tag
 echo $study
