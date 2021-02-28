@@ -13,7 +13,6 @@ tau: 0.005
 gamma: 0.99
 train_freq: 1
 gradient_steps: 1
-n_episodes_rollout: -1
 #action_noise: None
 target_update_interval: 1
 #target_entropy: Union[str, float] = "auto"

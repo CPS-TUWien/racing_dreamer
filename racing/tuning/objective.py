@@ -1,13 +1,19 @@
 import numpy as np
 import optuna
+import yaml
 from optuna import Trial
 from racing.experiments import dispatch_experiment
 from racing.tuning.util import get_params
 
+def freeze_params(params, logdir):
+    with open(f'{logdir}/params.yml') as file:
+        yaml.safe_dump(params)
+
 
 def objective(trial: Trial, args):
     args.params = get_params(trial=trial, tunable_params=args.tunable_params, default_params=args.default_params)
-    experiment, agent_ctor = dispatch_experiment(args, f'{args.logdir}/{trial.number}')
+    experiment, agent_ctor = dispatch_experiment(args, f'{args.logdir}/logs/{trial.number}')
+    freeze_params(params=args.params, logdir=f'{args.logdir}/logs/{trial.number}')
     agent = experiment.configure_agent(agent_ctor)
     objective_value = -1e9
     for epoch in range(1, args.epochs+1):

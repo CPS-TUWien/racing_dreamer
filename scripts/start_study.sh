@@ -26,14 +26,14 @@ export TRACK=austria
 export STEPS=100000
 export EPOCHS=10
 export TRIALS=50
-export LOGDIR=$(pwd)/logs/tuning
+export LOGDIR=$(pwd)/logs/tuning/$study
 
 echo $tag
 echo $study
 echo $algorithm
 echo $LOGDIR
 docker-compose -f docker/study-compose.yml up -d database
-sleep 2
+sleep 10
 docker-compose -f docker/study-compose.yml up -d tuning
 sleep 1
 docker-compose -f docker/study-compose.yml up -d --scale tuning=$instances database tuning

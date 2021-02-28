@@ -19,7 +19,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
     runtime: nvidia
     volumes:
-      - ${LOGDIR}/${STUDY}/logs:/app/logs/tuning/
+      - ${LOGDIR}:/app/logs/
 
 volumes:
   mysql_volume:

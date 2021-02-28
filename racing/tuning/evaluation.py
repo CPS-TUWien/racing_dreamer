@@ -28,10 +28,9 @@ def write_data(logdir, study):
 
 def main(args):
     study = optuna.load_study(study_name=args.study_name, storage=args.storage)
-    logdir = f'logs/tuning/{study.study_name}'
-    os.makedirs(logdir, exist_ok=True)
-    make_plots(logdir=logdir, study=study)
-    write_data(logdir=logdir, study=study)
+    os.makedirs(args.logdir, exist_ok=True)
+    make_plots(logdir=args.logdir, study=study)
+    write_data(logdir=args.logdir, study=study)
 
 
 
@@ -39,7 +38,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run hyperparameter tuning for a specified algorithm.')
     parser.add_argument('--study_name', type=str, required=True)
     parser.add_argument('--storage', type=str, required=False)
-    parser.add_argument('--path', type=str, default='.')
+    parser.add_argument('--logdir', type=str, default='evaluations/')
     args = parser.parse_args()
 
     if not args.storage:
