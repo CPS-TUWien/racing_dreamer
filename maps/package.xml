@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package>
+  <name>f1tenth_maps</name>
+  <version>0.0.1</version>
+  <description>A collection of f1tenth tracks from various sources.</description>
+
+  <maintainer email="andreas.brandstaetter@tuwien.ac.at">Andreas Brandstaetter</maintainer>
+  <!-- see: https://github.com/CPS-TUWien/f1tenth_maps -->
+
+  <license>MIT</license>
+
+</package>
