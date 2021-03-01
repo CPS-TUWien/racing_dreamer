@@ -38,7 +38,11 @@ pip install --user -r requirements.txt
 
 ### Training
 
-Train the agent with Lidar reconstruction:
+We train Dreamer on LiDAR observations and propose two Reconstruction variants: LiDAR and Occupancy Map.
+
+![Reconstruction Variants](docs/reconstruction_sequences.png)
+
+Train the agent with LiDAR reconstruction:
 
 ```
 python dreamer.py --track columbia --obs_type lidar
