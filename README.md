@@ -1,6 +1,6 @@
 # Racing Dreamer: Model-based Reinforcement Learning Improves Autonomous Racing Performance
 
-![](docs/austria_view.gif)
+![Racing Dreamer](docs/treitl_sim2real.gif)
 
 This repository is organized as follows:
 - Folder `dreamer` contains the code related to the Dreamer agent.
