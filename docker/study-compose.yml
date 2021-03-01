@@ -13,13 +13,26 @@ services:
 
   tuning:
     image: axel/racing:${LABEL}
-    command: python run_tuning.py --study_name ${STUDY} --agent ${AGENT} --track ${TRACK} --task max_progress --tunable_params hyperparams/tuning/${AGENT}.yml --default_params hyperparams/${AGENT}.yml --steps ${STEPS} --epochs ${EPOCHS} --trials ${TRIALS}
+    command: bash -c "
+        python run_tuning.py
+            --study_name ${STUDY}
+            --agent ${AGENT}
+            --track ${TRACK}
+            --task max_progress
+            --tunable_params hyperparams/tuning/${AGENT}.yml
+            --default_params hyperparams/${AGENT}.yml
+            --steps ${STEPS}
+            --epochs ${EPOCHS}
+            --trials ${TRIALS}
+            --logdir /app/$STUDY/
+            --storage mysql+pymysql://user:password@localhost/${STUDY}
+        "
     network_mode: host
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
     runtime: nvidia
     volumes:
-      - ${LOGDIR}:/app/logs/
+      - ${LOGDIR}:/app/$STUDY/
 
 volumes:
   mysql_volume:

@@ -13,19 +13,28 @@ from racing.tuning.objective import objective
 
 
 def main(args):
+    # load hyperparameters from files
     args.default_params = read_hyperparams(file=args.default_params)
     args.tunable_params = read_hyperparams(file=args.tunable_params)
+
+    # create a parametrized objective function
     objective_fn = partial(objective, args=args)
+
+    # create or load the study
     study = optuna.create_study(
         study_name=args.study_name,
         storage=args.storage,
-        pruner=optuna.pruners.SuccessiveHalvingPruner(),
+        pruner=optuna.pruners.HyperbandPruner(),
         sampler=optuna.samplers.TPESampler(),
         load_if_exists=True,
         direction='maximize'
     )
 
-    study.enqueue_trial(args.default_params)
+    # if the study was just created, do a run with the default parameters
+    if len(study.trials) == 0:
+        study.enqueue_trial(args.default_params)
+
+    # start the optimization process
     study.optimize(
         func=objective_fn,
         n_trials=args.trials,
