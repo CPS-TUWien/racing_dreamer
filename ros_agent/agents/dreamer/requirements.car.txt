@@ -1,0 +1,8 @@
+gym
+tensorflow_probability==0.11.1
+-e git+https://github.com/axelbr/racecar_gym.git#egg=racecar_gym
+imageio
+imageio-ffmpeg
+Pillow==7.2.0
+osrf-pycommon
+keras-ncp==1.0.4

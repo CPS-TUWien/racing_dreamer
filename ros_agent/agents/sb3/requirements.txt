@@ -1,0 +1,5 @@
+numpy==1.17.4
+stable-baselines3==0.10.0
+torch==1.7.0
+osrf-pycommon
+

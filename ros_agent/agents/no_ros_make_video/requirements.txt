@@ -1,0 +1,13 @@
+numpy
+gym
+tensorflow-gpu>=2.3.1
+tensorflow_probability
+-e git+https://github.com/axelbr/racecar_gym.git#egg=racecar_gym
+matplotlib
+imageio
+imageio-ffmpeg
+Pillow==7.2.0
+osrf-pycommon
+keras-ncp==1.0.4
+cmocean
+

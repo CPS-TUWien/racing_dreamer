@@ -1,0 +1,15 @@
+# FROM ros:noetic-ros-core
+FROM ros:melodic-ros-core
+RUN mkdir -p /ws/src/f1tenth_agent_ros/
+WORKDIR /ws/src/f1tenth_agent_ros/
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ros-melodic-ackermann-msgs ros-melodic-tf python3 python3-pip git wget unzip python3-catkin-tools make gcc g++  && \
+    rm -rf /var/lib/apt/lists/*
+
+# install python requirements for this agent
+ARG AGENT
+COPY agents/${AGENT}/requirements.txt .
+# RUN pip3 install --no-cache-dir -r requirements.txt
+
+

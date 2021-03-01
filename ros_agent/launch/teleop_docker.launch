@@ -1,0 +1,19 @@
+<!-- -*- mode: XML -*- -->
+<launch>
+  <arg name="racecar_version" default="racecar-v2" />
+  <arg name="run_camera" default="false"/>
+
+  <include file="$(find racecar)/launch/includes/$(arg racecar_version)-teleop.launch.xml">
+    <arg name="racecar_version" value="$(arg racecar_version)" />
+    <arg name="run_camera" value="$(arg run_camera)" />
+  </include>
+
+  <remap from="nav" to="vesc/high_level/ackermann_cmd_mux/input/nav_0" />
+  <node pkg="f1tenth_demo" type="safety_brake.py" name="safety_brake" output="screen" />
+  <node pkg="f1tenth_dreamer" type="docker_starter.sh" name="docker_starter" output="screen" />
+
+  <node pkg="f1tenth_dreamer" type="marker_translate.py" name="marker_translate" output="screen" />
+
+  <node name="record" pkg="rosbag" type="record" args="-a -o /home/rindt/race_ws/rosbags/docker_"/>
+
+</launch>

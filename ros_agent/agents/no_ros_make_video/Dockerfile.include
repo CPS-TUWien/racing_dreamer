@@ -1,0 +1,6 @@
+# download race maps
+WORKDIR /ws/src/f1tenth_agent_ros/src/racecar-gym/models/scenes
+RUN wget https://github.com/axelbr/racecar_gym/releases/download/tracks-v1.0.0/all.zip && unzip all.zip
+
+WORKDIR /ws/src/f1tenth_agent_ros/
+
