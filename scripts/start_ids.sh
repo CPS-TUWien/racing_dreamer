@@ -17,11 +17,12 @@ args=(
   "columbia lstm-ppo max_progress 8000000"
   "treitlstrasse_v2 lstm-ppo max_progress 8000000"
 )
-
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo $DIR
 for exp in "$@"
 do
   echo "Running exp_$exp"
   docker container rm "exp_$exp"
   index=$(($exp-1))
-  ./start_experiment.sh exp_$exp $(echo ${args[$index]})
+  $DIR/start_experiment.sh exp_$exp $(echo ${args[$index]})
 done
