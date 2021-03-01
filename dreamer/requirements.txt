@@ -1,0 +1,16 @@
+tensorflow==2.3.1
+tensorflow_probability==0.11.1
+numpy
+gym
+-e git+https://github.com/axelbr/racecar_gym.git#egg=racecar_gym
+tensorflow-plot
+pandas
+matplotlib
+imageio
+imageio-ffmpeg
+stable-baselines3   # for evaluation of mfree methods
+torch               # for evaluation of mfree methods
+tensorboard
+DateTime
+scipy
+Pillow
