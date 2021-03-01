@@ -106,12 +106,15 @@ class SingleAgentExperiment:
 
         t = self._counter.get_counts()['steps']
         iterations = 0
+        should_render = False
         render_interval = 5
         best_mean_progress = -np.inf
         while t < steps:
-            should_render = t >= render_interval * eval_every_steps * iterations
-            if should_render:
-                iterations += 1
+            if iterations % render_interval == 0:
+                should_render = True
+            else:
+                should_render = False
+            iterations += 1
             test_result = self.test(eval_actor, render=should_render, timestep=t)
             if test_result['progress_mean'] > best_mean_progress:
                 best_mean_progress = test_result['progress_mean']
