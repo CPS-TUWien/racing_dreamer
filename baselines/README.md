@@ -78,8 +78,35 @@ With this table, you can launch one or more experiments using their id with this
 
 Example:
 ```bash
-./scripts/start_ids 1 2 3
+./scripts/start_ids 1 2 3 4 13
 ```
+This launches training runs of all agents on austria.
 
 ### Hyperparameter Tuning
 
+We also conducted some experiments to find good hyperparameter sets for the
+model-free algorithms. For this, we used the hyperparameter optimization framework [Optuna](https://optuna.readthedocs.io/en/stable/).
+
+For hyperparameter optimization studies, the main entry point is [run_tuning.py](./run_tuning.py).
+You can call it with the following arguments:
+```shell
+ python run_tuning.py
+            --study_name <study_name>
+            --agent <mpo|d4pg|sac|ppo>
+            --track <austria|columbia|treitlstrasse_v2>
+            --task <max_progress|max_speed>
+            --tunable_params hyperparams/tuning/<mpo|d4pg|sac|ppo>.yml
+            --default_params hyperparams/default/<mpo|d4pg|sac|ppo>.yml
+            --steps <steps per epoch>
+            --epochs <reporting intervals>
+            --trials <number of runs>
+            --logdir <log-directory>
+            --storage <storage-string> (see https://optuna.readthedocs.io/en/stable/tutorial/20_recipes/001_rdb.html)
+```
+
+To launch a study using docker containers, you can use the [start_study.sh](./scripts/start_study.sh) script:
+```shell
+./scripts/start_study.sh <study_name> <agent> <nr_of_parallel_tuning_instances>
+```
+This starts a MySQL database in a docker container and a number of workers runing the
+optimization process (for details see: [study-compose.yml](./docker/study-compose.yml)).
