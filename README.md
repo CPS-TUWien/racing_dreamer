@@ -45,28 +45,28 @@ We train Dreamer on LiDAR observations and propose two Reconstruction variants: 
 Train the agent with LiDAR reconstruction:
 
 ```
-python dreamer.py --track columbia --obs_type lidar
+python dreamer/dream.py --track columbia --obs_type lidar
 ```
 
 Train the agent with Occupancy Map reconstruction:
 ```
-python dreamer.py --track columbia --obs_type lidar_occupancy
+python dreamer/dream.py --track columbia --obs_type lidar_occupancy
 ```
 
-Please, refer to `dreamer.py` for the other command-line arguments.
+Please, refer to `dream.py` for the other command-line arguments.
 
 ### Offline Evaluation
 The evaluation module runs offline testing of a trained agent (Dreamer, D4PG, MPO, PPO, SAC).
 
 To run evaluation:
 ```
-python evaluations/run_evaluation.py --agent dreamer \
-                                     --trained_on austria \
-                                     --obs_type lidar \
-                                     --checkpoint_dir logs/checkpoints \
-                                     --outdir logs/evaluations \
-                                     --eval_episodes 10 \
-                                     --tracks columbia barcelona \
+python dreamer/evaluations/run_evaluation.py --agent dreamer \
+                                             --trained_on austria \
+                                             --obs_type lidar \
+                                             --checkpoint_dir logs/checkpoints \
+                                             --outdir logs/evaluations \
+                                             --eval_episodes 10 \
+                                             --tracks columbia barcelona \
 ```
 The script will look for all the checkpoints with pattern `logs/checkpoints/austria_dreamer_lidar_*`
 The checkpoint format depends on the saving procedure (`pkl`, `zip` or directory).
@@ -78,21 +78,21 @@ The plotting module containes several scripts to visualize the results, usually 
 
 To plot the learning curves:
 ```
-python plotting/plot_training_curves.py --indir logs/experiments \
-                                        --outdir plots/learning_curves \
-                                        --methods dreamer mpo \
-                                        --tracks austria columbia treitlstrasse_v2 \
-                                        --legend
+python dreamer/plotting/plot_training_curves.py --indir logs/experiments \
+                                                --outdir plots/learning_curves \
+                                                --methods dreamer mpo \
+                                                --tracks austria columbia treitlstrasse_v2 \
+                                                --legend
 ```
 It will produce the comparison between Dreamer and MPO on the tracks Austria, Columbia, Treitlstrasse_v2.
 
 To plot the evaluation results:
 ```
-python plotting/plot_test_evaluation.py --indir logs/evaluations \
-                                        --outdir plots/evaluation_charts \
-                                        --methods dreamer mpo \
-                                        --vis_tracks austria columbia treitlstrasse_v2 \
-                                        --legend
+python dreamer/plotting/plot_test_evaluation.py --indir logs/evaluations \
+                                                --outdir plots/evaluation_charts \
+                                                --methods dreamer mpo \
+                                                --vis_tracks austria columbia treitlstrasse_v2 \
+                                                --legend
 ```
 It will produce the bar charts comparing Dreamer and MPO evaluated in Austria, Columbia, Treitlstrasse_v2.
 
