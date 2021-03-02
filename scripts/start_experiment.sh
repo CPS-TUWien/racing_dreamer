@@ -3,15 +3,11 @@ name=$1
 track=$2
 algorithm=$3
 task=$4
-params=hyperparams/$algorithm.yml
 steps=$5
+params=$6
 eval_interval=20000
 gpu=all
 
-if [[ ! -z "$6" ]]
-then
-  gpu=$6
-fi
 
 if [[ $algorithm == 'mpo' ]] || [[ $algorithm == 'd4pg' ]]
 then
@@ -35,4 +31,4 @@ echo "params: $params"
 echo "steps: $steps"
 echo "gpus: $gpu"
 
-docker run --name $name --rm --gpus $gpu -d  -v $(pwd)/logs:/app/logs --network host axel/racing:$tag python3 run_experiments.py --track $track --task $task --agent $algorithm --params $params --steps $steps --eval_interval 2000
+docker run --name $name --gpus $gpu -d  -v $(pwd)/logs:/app/logs --network host axel/racing:$tag python3 run_experiments.py --track $track --task $task --agent $algorithm --params $params --steps $steps --eval_interval $eval_interval

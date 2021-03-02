@@ -20,7 +20,7 @@ services:
             --track ${TRACK}
             --task max_progress
             --tunable_params hyperparams/tuning/${AGENT}.yml
-            --default_params hyperparams/${AGENT}.yml
+            --default_params hyperparams/default/${AGENT}.yml
             --steps ${STEPS}
             --epochs ${EPOCHS}
             --trials ${TRIALS}

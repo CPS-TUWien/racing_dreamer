@@ -36,7 +36,6 @@ if __name__ == '__main__':
     parser.add_argument('--eval_interval', type=int, required=False, default=10_000)
     parser.add_argument('--action_repeat', type=int, required=False, default=4)
     parser.add_argument('--logdir', type=str, default='logs/experiments')
-    #parser.add_argument('--from_checkpoint', type=str, required=False)\
     args = parser.parse_args()
     print(args.seed)
     main(args)

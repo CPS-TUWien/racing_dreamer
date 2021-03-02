@@ -1,0 +1,15 @@
+policy_layers: [400, 400, 400, 400]
+critic_layers: [400, 400, 400]
+policy_lr: 0.00071
+critic_lr: 1.0e-05
+sigma: 0.3
+atoms: 51
+discount: 0.99
+batch_size: 256
+target_update_period: 100
+samples_per_insert: 32.0
+n_step: 5
+clipping: True
+checkpoint: True
+max_replay_size: 500000
+min_replay_size: 1000

@@ -1,0 +1,22 @@
+learning_rate: 0.0003
+buffer_size: 500000
+learning_starts: 100
+policy_kwargs: {
+  net_arch:
+    {
+      pi: [400, 400, 400, 400],
+      qf: [400, 400, 400]
+    }
+}
+batch_size: 256
+tau: 0.005
+gamma: 0.99
+train_freq: 1
+gradient_steps: 1
+#action_noise: None
+target_update_interval: 1
+#target_entropy: Union[str, float] = "auto"
+use_sde: False # state dependent exploration
+sde_sample_freq: -1
+use_sde_at_warmup: False
+
