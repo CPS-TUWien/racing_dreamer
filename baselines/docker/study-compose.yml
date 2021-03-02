@@ -12,7 +12,7 @@ services:
       - mysql_volume:/var/lib/mysql
 
   tuning:
-    image: axel/racing:${LABEL}
+    image: tuwcps/racing:${LABEL}
     command: bash -c "
         python run_tuning.py
             --study_name ${STUDY}
