@@ -115,7 +115,13 @@ docker run -u $(id -u):$(id -g) -v $(pwd):/src --gpus all --rm dreamer python dr
 
 # Model Free
 
+The organization of Model-Free codebase is similar and we invite the users 
+to refer to the [README](baselines/README.md) for the detailed instructions.
+
 # Hardware
-* Folder `maps` contains a collection of several tracks to be used in [F1Tenth](https://f1tenth.org/) races.
-* Folder `mechanical` contains support material for real world race-tracks.
-* Folder `ros_agent` contains the ROS interface to run the RL agent on a race car.
+
+The codebase for the implementation on real cars is contained in `ros_agent`.
+
+Additional material:
+* Folder `docs/maps` contains a collection of several tracks to be used in [F1Tenth](https://f1tenth.org/) races.
+* Folder `docs/mechanical` contains support material for real world race-tracks.
