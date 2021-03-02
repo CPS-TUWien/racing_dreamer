@@ -6,10 +6,24 @@ The resulting policy has been evaluated on F1tenth-like tracks and then transfer
 
 ![Racing Dreamer](docs/readme/treitl_sim2real.gif)
 
+If you find this code useful, please reference in your paper:
+
+```
+@article{racingdreamer2020, 
+  title={Model-based versus Model-free Deep Reinforcement Learning for Autonomous Racing Cars},
+  author={Brunnbauer, Axel and Berducci, Luigi and Brandstaetter, Andreas and Lechner, Mathias and Hasani, Ramin and Rus, Daniela and Grosu, Radu},
+  journal={TBD},
+  year={2019}
+}
+```
+
+
 This repository is organized as follows:
 - Folder `dreamer` contains the code related to the Dreamer agent.
-- Folder `modelfree` contains the code related to the Model Free algorihtms (D4PG, MPO, PPO, LSTM-PPO, SAC).
-- Folder `hardware` contains the code related to the transfer on real racing cars.
+- Folder `baselines` contains the code related to the Model Free algorihtms (D4PG, MPO, PPO, LSTM-PPO, SAC).
+- Folder `ros_agent` contains the code related to the transfer on real racing cars.
+- Folder `docs` contains the track maps, mechanical and general documentation.
+
 
 # Dreamer
 
@@ -117,6 +131,7 @@ docker run -u $(id -u):$(id -g) -v $(pwd):/src --gpus all --rm dreamer python dr
 
 The organization of Model-Free codebase is similar and we invite the users 
 to refer to the [README](baselines/README.md) for the detailed instructions.
+
 
 # Hardware
 
