@@ -241,7 +241,7 @@ class Dreamer(tools.Module):
         self._metrics['action_ent'].update_state(self._actor(feat).entropy())
 
     def _image_summaries(self, data, embed, image_pred):
-        summary_size = 6  # nr images to be shown
+        summary_size = 6  # nr readme to be shown
         summary_length = 5  # nr step observed before dreaming
         if self._c.obs_type in ['image', 'lidar']:
             truth = data[self._c.obs_type][:summary_size] + 0.5
@@ -277,7 +277,7 @@ class Dreamer(tools.Module):
                             'agent/train/autoencoder', openl, self._step, int(100 / self._c.action_repeat))
 
     def _reward_summaries(self, data, reward_pred):
-        summary_size = 6  # nr images to be shown
+        summary_size = 6  # nr readme to be shown
         truth = tools.reward_to_image(data['reward'][:summary_size])
         model = tools.reward_to_image(reward_pred.mode()[:summary_size])
         error = model - truth

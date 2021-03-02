@@ -4,7 +4,7 @@ In this work, we propose to learn a racing controller directly from raw Lidar ob
 
 The resulting policy has been evaluated on F1tenth-like tracks and then transfered to real cars.
 
-![Racing Dreamer](docs/treitl_sim2real.gif)
+![Racing Dreamer](docs/readme/treitl_sim2real.gif)
 
 This repository is organized as follows:
 - Folder `dreamer` contains the code related to the Dreamer agent.
@@ -40,7 +40,7 @@ pip install --user -r requirements.txt
 
 We train Dreamer on LiDAR observations and propose two Reconstruction variants: LiDAR and Occupancy Map.
 
-![Reconstruction Variants](docs/reconstruction_sequences.png)
+![Reconstruction Variants](docs/readme/reconstruction_sequences.png)
 
 Train the agent with LiDAR reconstruction:
 

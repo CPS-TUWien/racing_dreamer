@@ -22,15 +22,15 @@ def make_log_dir(args):
   return out_dir, writer
 
 def save_dreams(basedir, agent, data, embed, image_pred, obs_type='lidar', summary_length=5, skip_frames=10):
-    """ Perform dreaming and save the imagined sequences as images.
-      `basedir`:  base log dir where the images will be stored
+    """ Perform dreaming and save the imagined sequences as readme.
+      `basedir`:  base log dir where the readme will be stored
       `agent`:    instance of dreamer
       `embed`:    tensor of embeds, shape (B, E) where B is the episode length
-      `data`:     dictionary of observed data, it contains observation and camera images
+      `data`:     dictionary of observed data, it contains observation and camera readme
       `image_pred`: distribution of predicted reconstructions
       `obs_type`:   observation type, either lidar or lidar_occupancy
     """
-    imagedir = basedir / "images"
+    imagedir = basedir / "readme"
     imagedir.mkdir(parents=True, exist_ok=True)
     if obs_type == 'lidar':
         truth = data['lidar'][:1] + 0.5
@@ -71,7 +71,7 @@ def save_dreams(basedir, agent, data, embed, image_pred, obs_type='lidar', summa
 
 
 def dreaming(agent, cameras, lidars, occupancies, actions, obstype, basedir):
-    """ Given observation, actions, camera and map images
+    """ Given observation, actions, camera and map readme
       run 'dreaming' in latent space and store the real observation and the reconstructed one.
       """
     data = {'lidar': np.stack(np.expand_dims(lidars, 0)),
