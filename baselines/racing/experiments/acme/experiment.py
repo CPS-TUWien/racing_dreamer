@@ -1,12 +1,10 @@
 import os
 import random
-from collections import defaultdict
 from dataclasses import dataclass
 from time import time
 from typing import List, Callable, Tuple
 
 import gym
-import imageio
 import numpy as np
 import tensorflow as tf
 from acme.tf import savers
@@ -20,10 +18,10 @@ from gym.wrappers import TimeLimit, FilterObservation
 from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 
-from racing import save_video
-from racing.environment import InfoToObservation, FixedResetMode
-from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations
-from racing.experiments.acme.logger import TensorBoardLogger, PrefixedTensorBoardLogger
+from baselines.racing import save_video
+from baselines.racing import InfoToObservation, FixedResetMode
+from baselines.racing import ActionRepeat, Flatten, NormalizeObservations
+from baselines.racing.experiments.acme import TensorBoardLogger, PrefixedTensorBoardLogger
 
 
 

@@ -105,7 +105,7 @@ celerybeat.pid
 .env
 .venv
 env/
-venv/
+../venv/
 ENV/
 env.bak/
 venv.bak/
@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 
 environment_loop/
+.DS_Store

@@ -4,8 +4,8 @@ import numpy as np
 import optuna
 import yaml
 from optuna import Trial
-from racing.experiments import dispatch_experiment
-from racing.tuning.util import get_params
+from baselines.racing import dispatch_experiment
+from baselines.racing.tuning.util import get_params
 
 def freeze_params(params, logdir):
     os.makedirs(logdir, exist_ok=True)

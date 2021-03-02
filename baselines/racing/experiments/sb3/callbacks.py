@@ -4,7 +4,7 @@ from typing import Union, Optional, Dict, Any, List
 import gym
 import numpy as np
 
-from racing import save_video
+from baselines.racing import save_video
 
 def make_callback(version=3, **kwargs):
 

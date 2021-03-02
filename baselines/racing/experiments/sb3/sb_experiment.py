@@ -1,7 +1,6 @@
 import os
 import random
 from dataclasses import dataclass
-from time import time
 from typing import List, Callable
 
 import gym
@@ -9,11 +8,10 @@ import numpy as np
 from gym.wrappers import TimeLimit, FilterObservation
 from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
-from stable_baselines3.common.evaluation import evaluate_policy
 
-from racing.environment import FixedResetMode
-from racing.environment.single_agent import ActionRepeat, Flatten, NormalizeObservations
-from racing.experiments.sb3.callbacks import make_callback
+from baselines.racing import FixedResetMode
+from baselines.racing import ActionRepeat, Flatten, NormalizeObservations
+from baselines.racing.experiments.sb3 import make_callback
 
 
 class SingleAgentExperiment:

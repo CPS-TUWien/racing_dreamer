@@ -1,0 +1,16 @@
+id,track,agent,task
+1,austria,mpo,max_progress
+2,austria,d4pg,max_progress
+3,austria,sac,max_progress
+4,austria,ppo,max_progress
+5,columbia,mpo,max_progress
+6,columbia,d4pg,max_progress
+7,columbia,sac,max_progress
+8,columbia,ppo,max_progress
+9,treitlstrasse,mpo,max_progress
+10,treitlstrasse,d4pg,max_progress
+11,treitlstrasse,sac,max_progress
+12,treitlstrasse,ppo,max_progress
+13,austria,lstm-ppo,max_progress
+14,columbia,lstm-ppo,max_progress
+15,treitlstrasse,lstm-ppo,max_progress

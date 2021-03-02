@@ -1,10 +1,10 @@
 from functools import partial
 from typing import Optional, Dict
 
-from racing.experiments.sb3.sb_experiment import SingleAgentExperiment as Sb3Experiment
+from baselines.racing.experiments.sb3 import SingleAgentExperiment as Sb3Experiment
 
 
-from racing.experiments.util import read_hyperparams
+from baselines.racing.experiments.util import read_hyperparams
 
 
 def choose_agent(name: str, param_file: Optional[str], checkpoint_path: str):
