@@ -9,7 +9,7 @@ The resulting policy has been evaluated on F1tenth-like tracks and then transfer
 If you find this code useful, please reference in your paper:
 
 ```
-@article{racingdreamer2020, 
+@article{racingdreamer2021, 
   title={Model-based versus Model-free Deep Reinforcement Learning for Autonomous Racing Cars},
   author={Brunnbauer, Axel and Berducci, Luigi and Brandstaetter, Andreas and Lechner, Mathias and Hasani, Ramin and Rus, Daniela and Grosu, Radu},
   journal={TBD},
