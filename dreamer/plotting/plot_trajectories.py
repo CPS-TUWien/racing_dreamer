@@ -5,14 +5,11 @@ from datetime import datetime
 
 from matplotlib.collections import LineCollection
 
-from plotting.aggregators import MeanMinMax
-from plotting.log_parsers import EvaluationParser
-from plotting.plot_training_curves import sort_methods
-from plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, COLORS
-from plotting.utils import load_runs, load_trajectories
+from dreamer.plotting.log_parsers import EvaluationParser
+from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, COLORS
+from dreamer.plotting.utils import load_runs, load_trajectories
 import matplotlib.pyplot as plt
 import numpy as np
-from collections.abc import Iterable   # import directly from collections for Python < 3.3
 
 
 def plot_trajectories(trajectories, agent, train_track, test_track, outdir, minvel=0.5, maxvel=4.0):

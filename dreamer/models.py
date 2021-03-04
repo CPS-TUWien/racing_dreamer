@@ -10,7 +10,7 @@ from tensorflow_probability import distributions as tfd
 from tensorflow.keras.mixed_precision import experimental as prec
 from tensorflow_probability import layers as tfpl
 
-import tools
+import dreamer.tools as tools
 
 
 class Dreamer(tools.Module):

@@ -5,10 +5,10 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 
-from plotting.log_parsers import DreamerParser
-from plotting.utils import load_runs
+from dreamer.plotting.log_parsers import DreamerParser
+from dreamer.plotting.utils import load_runs
 
-from plotting.structs import ALL_METHODS_DICT, LONG_TRACKS_DICT, COLORS
+from dreamer.plotting.structs import ALL_METHODS_DICT, LONG_TRACKS_DICT, COLORS
 
 
 def get_base_methods(methods):
@@ -53,6 +53,7 @@ def plot_performance(args, tag, runs, axes):
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
 
+from collections.abc import Iterable   # import directly from collections for Python < 3.3
 
 def main(args):
   assert len(args.hbaseline_names) == len(args.hbaseline_values)
@@ -62,13 +63,14 @@ def main(args):
   tracks = sorted(set([r.train_track for r in runs]))
   args.outdir.mkdir(parents=True, exist_ok=True)
   timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-  fig, axes = plt.subplots(1, len(tracks), figsize=(5 * len(tracks), 4))
+  fig, axes = plt.subplots(1, len(tracks), figsize=(6 * len(tracks), 3))
   plot_performance(args, tag, runs, axes)
   if args.legend:
     if not type(axes) == np.ndarray:  # in case of fig with a single axis
       axes = [axes]
     handles, labels = axes[-1].get_legend_handles_labels()
-    fig.legend(handles, labels, loc='lower center', ncol=len(labels), framealpha=1.0)
+    fig.legend(handles, labels, loc='upper center', ncol=len(labels),
+               framealpha=1.0, fontsize='small')
   filename = f'curves_' + '_'.join(tracks) + f'_compare_{gby_param}_{timestamp}.png'
   fig.tight_layout(pad=1.0)
   fig.savefig(args.outdir / filename)

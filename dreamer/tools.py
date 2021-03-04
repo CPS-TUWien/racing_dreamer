@@ -1,21 +1,18 @@
-import datetime
 import functools
-import io
+import logging
 import math
 import pathlib
 import pickle
 import re
-import uuid
+
 import imageio
-import gym
 import numpy as np
 import tensorflow as tf
 import tensorflow.compat.v1 as tf1
 import tensorflow_probability as tfp
+import tfplot
 from tensorflow.keras.mixed_precision import experimental as prec
 from tensorflow_probability import distributions as tfd
-import tfplot
-import logging
 
 
 class AttrDict(dict):

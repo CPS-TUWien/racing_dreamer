@@ -5,11 +5,11 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from plotting.aggregators import MeanStd
-from plotting.utils import load_runs
-from plotting.log_parsers import ModelFreeParser, DreamerParser
+from dreamer.plotting.aggregators import MeanStd
+from dreamer.plotting.utils import load_runs
+from dreamer.plotting.log_parsers import ModelFreeParser, DreamerParser
 
-from plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, BEST_MFREE_PERFORMANCES, \
+from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, BEST_MFREE_PERFORMANCES, \
     BEST_DREAMER_PERFORMANCES, COLORS
 
 
@@ -60,6 +60,7 @@ def plot_filled_curve(args, runs, axes, aggregator):
                 else:
                     color = '#fffff'
                 ax.hlines(y=value, xmin=min_x, xmax=max_x, color=color, linestyle='dashed', label=name.upper())
+                ax.set_ylim(0, value+0.1)
         for j, (value, name) in enumerate(zip(args.hbaseline_values, args.hbaseline_names)):
             color = 'red'
             ax.hlines(y=value, xmin=min_x, xmax=max_x, color=color, linestyle='dotted', label=name.upper())
@@ -77,7 +78,7 @@ def main(args):
     args.outdir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     for aggregator, fn in zip(['mean_std'], [MeanStd()]):
-        fig, axes = plt.subplots(1, len(tracks), figsize=(max(8, 3 * len(tracks)), 5))
+        fig, axes = plt.subplots(1, len(tracks), figsize=(max(8, 3 * len(tracks)), 3))
         plot_filled_curve(args, runs, axes, aggregator=fn)
         if args.legend:
             if not type(axes) == np.ndarray:  # in case of fig with a single axis

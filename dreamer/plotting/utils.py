@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
-from plotting.structs import PALETTE, SHORT_TRACKS_DICT, LONG_TRACKS_DICT, ALL_METHODS_DICT, BEST_MFREE_PERFORMANCES
+from dreamer.plotting.structs import PALETTE, SHORT_TRACKS_DICT, LONG_TRACKS_DICT, ALL_METHODS_DICT, BEST_MFREE_PERFORMANCES
 
 DREAMER_CONFS = {}
 

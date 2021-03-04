@@ -3,11 +3,11 @@ import time
 import pathlib
 from datetime import datetime
 
-from plotting.aggregators import MeanMinMax
-from plotting.log_parsers import EvaluationParser
-from plotting.plot_training_curves import sort_methods
-from plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, COLORS
-from plotting.utils import load_runs
+from dreamer.plotting.aggregators import MeanMinMax
+from dreamer.plotting.log_parsers import EvaluationParser
+from dreamer.plotting.plot_training_curves import sort_methods
+from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, COLORS
+from dreamer.plotting.utils import load_runs
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -50,7 +50,7 @@ def plot_error_bar(args, runs, ax, aggregator):
     mins = xpos - bar_width / 2
     ax.set_xticks((mins + (mins + len(methods) * (bar_width+interbar))) / 2)
     ax.set_xticklabels([SHORT_TRACKS_DICT[track] for track in test_tracks])
-    ax.set_title(f'TRAIN {LONG_TRACKS_DICT[train_track]}'.upper())
+    ax.set_title(f'TRAINED ON {LONG_TRACKS_DICT[train_track]}'.upper())
     ax.set_ylabel(args.ylabel)
     #ax.set_ylim(0, 1.1)
     # keep only axis, remove top/right

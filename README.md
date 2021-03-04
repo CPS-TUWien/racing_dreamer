@@ -13,7 +13,7 @@ If you find this code useful, please reference in your paper:
   title={Model-based versus Model-free Deep Reinforcement Learning for Autonomous Racing Cars},
   author={Brunnbauer, Axel and Berducci, Luigi and Brandstaetter, Andreas and Lechner, Mathias and Hasani, Ramin and Rus, Daniela and Grosu, Radu},
   journal={TBD},
-  year={2020}
+  year={2021}
 }
 ```
 

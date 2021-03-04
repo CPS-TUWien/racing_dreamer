@@ -11,17 +11,17 @@ import logging
 
 import yaml
 
-import tools
-import wrappers
+import dreamer.tools as tools
+import dreamer.wrappers as wrappers
 from agents.gap_follower import GapFollower
 
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.mixed_precision import experimental as prec
 
-import callbacks
+import dreamer.callbacks as callbacks
 
-from models import Dreamer
+from dreamer.models import Dreamer
 
 tf.get_logger().setLevel('ERROR')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -39,7 +39,7 @@ def define_config():
     # General.
     config.datetime = datetime.now().strftime("%m-%d-%Y %H:%M:%S")      # just for logging config
     config.seed = random.randint(2, 10 ** 6)
-    config.logdir = pathlib.Path('logs/experiments')
+    config.logdir = pathlib.Path('dreamer/logs/experiments')
     config.steps = 5e6
     config.eval_every = 1e4
     config.log_every = 1e3

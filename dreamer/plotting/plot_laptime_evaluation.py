@@ -6,14 +6,14 @@ from datetime import datetime
 
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
-from plotting.aggregators import MeanStd, MeanMinMax
-from plotting.log_parsers import EvaluationParser
-from plotting.plot_test_evaluation import plot_error_bar
-from plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, PALETTE
+from dreamer.plotting.aggregators import MeanStd, MeanMinMax
+from dreamer.plotting.log_parsers import EvaluationParser
+from dreamer.plotting.plot_test_evaluation import plot_error_bar
+from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, PALETTE
 import matplotlib.pyplot as plt
 import numpy as np
 
-from plotting.utils import parse_file, check_track, check_method, get_tf_data, Run
+from dreamer.plotting.utils import parse_file, check_track, check_method, get_tf_data, Run
 
 
 def load_filtered_runs(args, file_parsers, tag, filter_tag, threshold):
