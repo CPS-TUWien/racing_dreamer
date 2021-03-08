@@ -32,9 +32,9 @@ From imagined feature sequences, it learns a policy and state-value function.
 The value gradients are backpropagated through the multi-step predictions to
 efficiently learn a long-horizon policy."*
 
-This implementation extends the original implementation of [Dreamer](https://github.com/danijar/dreamer). 
+This implementation extends the original implementation of [Dreamer (Hafner et al. 2019)](https://github.com/danijar/dreamer). 
 
-We invite the reader to refer to the [Dreamer website](https://danijar.com/project/dreamer/) for the details on the algorithm.
+We refer the reader to the [Dreamer website](https://danijar.com/project/dreamer/) for the details on the algorithm.
 
 ![Dreamer](https://imgur.com/JrXC4rh.png)
 
