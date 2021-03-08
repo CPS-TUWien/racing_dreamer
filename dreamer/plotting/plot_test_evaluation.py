@@ -6,7 +6,7 @@ from datetime import datetime
 from dreamer.plotting.aggregators import MeanMinMax
 from dreamer.plotting.log_parsers import EvaluationParser
 from dreamer.plotting.plot_training_curves import sort_methods
-from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, COLORS
+from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, COLORS, FONTSIZE
 from dreamer.plotting.utils import load_runs
 import matplotlib.pyplot as plt
 import numpy as np
@@ -56,6 +56,8 @@ def plot_error_bar(args, runs, ax, aggregator):
     # keep only axis, remove top/right
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
+    for item in [ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels():
+        item.set_fontsize(FONTSIZE)
 
 
 def main(args):
@@ -67,7 +69,6 @@ def main(args):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     for aggregator, fn in zip(['mean_minmax'], [MeanMinMax()]):
         fig, axes = plt.subplots(1, len(train_tracks), figsize=(4 * len(train_tracks), 3))
-        # todo move loop on train tracks in plot error bar
         for i, (train_track, ax) in enumerate(zip(train_tracks, axes)):
             filter_runs = [r for r in runs if r.train_track == "" or r.train_track==train_track]
             plot_error_bar(args, filter_runs, ax, aggregator=fn)
@@ -75,9 +76,11 @@ def main(args):
             if not type(axes) == np.ndarray:  # in case of fig with a single axis
                 axes = [axes]
             handles, labels = axes[-1].get_legend_handles_labels()
-            fig.legend(handles, labels, loc='lower center', ncol=len(labels), framealpha=1.0, handletextpad=0.1)
-        filename = f'eval_' + '_'.join(train_tracks) + f'_{aggregator}_{timestamp}.png'
+            fig.legend(handles, labels, loc='lower center', ncol=len(labels), framealpha=1.0,
+                       handletextpad=0.1, fontsize=FONTSIZE, columnspacing=0.2)
+        filename = f'eval_' + '_'.join(train_tracks) + f'_{aggregator}_{timestamp}.pdf'
         fig.tight_layout(pad=2.5)
+        plt.subplots_adjust(bottom=0.25)
         fig.savefig(args.outdir / filename)
         print(f"[Info] Written {args.outdir / filename}")
 

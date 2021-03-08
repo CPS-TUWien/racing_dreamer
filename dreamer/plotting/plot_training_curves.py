@@ -10,7 +10,7 @@ from dreamer.plotting.utils import load_runs
 from dreamer.plotting.log_parsers import ModelFreeParser, DreamerParser
 
 from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, BEST_MFREE_PERFORMANCES, \
-    BEST_DREAMER_PERFORMANCES, COLORS
+    BEST_DREAMER_PERFORMANCES, COLORS, FONTSIZE
 
 
 def sort_methods(method):
@@ -67,6 +67,9 @@ def plot_filled_curve(args, runs, axes, aggregator):
         # keep only axis, remove top/right
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
+        ax.set_xticks(range(0, 8000001, 2000000))
+        for item in [ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels():
+            item.set_fontsize(FONTSIZE)
 
 
 def main(args):
@@ -78,17 +81,20 @@ def main(args):
     args.outdir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     for aggregator, fn in zip(['mean_std'], [MeanStd()]):
-        fig, axes = plt.subplots(1, len(tracks), figsize=(max(8, 3 * len(tracks)), 3))
+        fig, axes = plt.subplots(1, len(tracks), figsize=(max(8, 3 * len(tracks)), 5))
+        plt.rc('font', size=FONTSIZE)          # controls default text sizes
         plot_filled_curve(args, runs, axes, aggregator=fn)
         if args.legend:
             if not type(axes) == np.ndarray:  # in case of fig with a single axis
                 axes = [axes]
             handles, labels = axes[-1].get_legend_handles_labels()
-            fontsize = 'x-small' if len(labels)>6 else 'small'
-            fig.legend(handles, labels, loc='lower center', ncol=len(labels), framealpha=1.0,
-                       handletextpad=0.1, fontsize=fontsize)
-        filename = f'curves_' + '_'.join(tracks) + f'_{aggregator}_{timestamp}.png'
+            fontsize = FONTSIZE     #'x-small' if len(labels)>6 else 'small'
+        fig.legend(handles, labels, loc='upper left', bbox_to_anchor=(0.08, 0.00, 0.85, .27),
+                   bbox_transform=fig.transFigure, mode='expand',
+                   columnspacing=1, handletextpad=0.0, ncol=4, framealpha=1.0, fontsize=fontsize)
+        filename = f'curves_' + '_'.join(tracks) + f'_{aggregator}_{timestamp}.pdf'
         fig.tight_layout(pad=1.0)
+        fig.subplots_adjust(bottom=0.35)
         fig.savefig(args.outdir / filename)
         print(f"[Info] Written {args.outdir / filename}")
 

@@ -6,8 +6,8 @@ import argparse
 import tensorflow as tf
 import time
 
-from evaluations.racing_agent import RacingAgent
-from evaluations.make_env import make_multi_track_env, wrap_wrt_track
+from dreamer.evaluations.racing_agent import RacingAgent
+from dreamer.evaluations.make_env import make_multi_track_env, wrap_wrt_track
 
 
 tf.config.run_functions_eagerly(run_eagerly=True)  # we need it to resume a model without need of same batchlen

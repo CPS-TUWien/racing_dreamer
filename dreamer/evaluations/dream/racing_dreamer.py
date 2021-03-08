@@ -1,11 +1,12 @@
 import pathlib
 import shutil
 
-import callbacks
-from evaluations.make_env import make_single_track_env
-from evaluations.racing_agent import Agent
-from dreamer import define_config, Dreamer
-import tools, wrappers
+import dreamer.callbacks as callbacks
+from dreamer.evaluations.make_env import make_single_track_env
+from dreamer.evaluations.racing_agent import Agent
+from dreamer.dream import define_config, Dreamer
+import dreamer.tools as tools
+import dreamer.wrappers as wrappers
 import tensorflow as tf
 
 

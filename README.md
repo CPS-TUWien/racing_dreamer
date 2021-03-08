@@ -42,7 +42,6 @@ We invite the reader to refer to the [Dreamer website](https://danijar.com/proje
 ## Instructions
 
 This code has been tested on `Ubuntu 18.04` with `Python 3.7`.
-We assume the user runs these commands from the `dreamer` directory.
  
 Get dependencies:
 

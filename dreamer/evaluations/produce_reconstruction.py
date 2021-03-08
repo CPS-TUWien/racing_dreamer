@@ -5,9 +5,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import tensorflow as tf
-import tools
-from evaluations.make_env import make_single_track_env, make_multi_track_env, wrap_wrt_track
-from evaluations.racing_agent import RacingAgent
+import dreamer.tools
+from dreamer.evaluations.make_env import make_single_track_env, make_multi_track_env, wrap_wrt_track
+from dreamer.evaluations.racing_agent import RacingAgent
+from dreamer.tools import lidar_to_image, preprocess
 
 tf.config.run_functions_eagerly(run_eagerly=True)   # we need it to resume a model without need of same batchlen
 
@@ -22,15 +23,15 @@ def make_log_dir(args):
   return out_dir, writer
 
 def save_dreams(basedir, agent, data, embed, image_pred, obs_type='lidar', summary_length=5, skip_frames=10):
-    """ Perform dreaming and save the imagined sequences as readme.
-      `basedir`:  base log dir where the readme will be stored
+    """ Perform dreaming and save the imagined sequences as image.
+      `basedir`:  base log dir where the images will be stored
       `agent`:    instance of dreamer
       `embed`:    tensor of embeds, shape (B, E) where B is the episode length
-      `data`:     dictionary of observed data, it contains observation and camera readme
+      `data`:     dictionary of observed data, it contains observation and camera image
       `image_pred`: distribution of predicted reconstructions
       `obs_type`:   observation type, either lidar or lidar_occupancy
     """
-    imagedir = basedir / "readme"
+    imagedir = basedir / "image"
     imagedir.mkdir(parents=True, exist_ok=True)
     if obs_type == 'lidar':
         truth = data['lidar'][:1] + 0.5
@@ -41,8 +42,8 @@ def save_dreams(basedir, agent, data, embed, image_pred, obs_type='lidar', summa
         prior = agent._dynamics.imagine(data['action'][:1, summary_length:], init)
         openl = agent._decode(agent._dynamics.get_feat(prior)).mode()
         model = tf.concat([recon[:, :summary_length] + 0.5, openl + 0.5], 1)
-        truth_img = tools.lidar_to_image(truth)
-        model_img = tools.lidar_to_image(model)
+        truth_img = lidar_to_image(truth)
+        model_img = lidar_to_image(model)
     elif obs_type == 'lidar_occupancy':
         truth_img = data['lidar_occupancy'][:1]
         recon = image_pred.mode()[:1]
@@ -66,18 +67,18 @@ def save_dreams(basedir, agent, data, embed, image_pred, obs_type='lidar', summa
             for t in range(0, imgs.shape[1], skip_frames):
                 # plot black/white without borders
                 plt.imshow(imgs[ep, t, :, :, :], cmap='binary')
-                plt.savefig(f"{imagedir}/frame_{timestamp}_{obs_type}_{prefix}_{ep}_{t}.png",
+                plt.savefig(f"{imagedir}/frame_{timestamp}_{obs_type}_{prefix}_{ep}_{t}.pdf",
                             bbox_inches='tight', transparent=True, pad_inches=0)
 
 
 def dreaming(agent, cameras, lidars, occupancies, actions, obstype, basedir):
-    """ Given observation, actions, camera and map readme
+    """ Given observation, actions, camera and map image
       run 'dreaming' in latent space and store the real observation and the reconstructed one.
       """
     data = {'lidar': np.stack(np.expand_dims(lidars, 0)),
             'action': np.stack(np.expand_dims(actions, 0)),
             'lidar_occupancy': np.stack(np.expand_dims(occupancies, 0))}
-    data = tools.preprocess(data, config=None)    # note: this is ugly but since we don't use reward clipping, i can pass config None
+    data = preprocess(data, config=None)    # note: this is ugly but since we don't use reward clipping, i can pass config None
     data['image'] = np.stack(np.expand_dims(cameras, 0))  # hack: don't preprocess image
     embed = agent._encode(data)
     post, prior = agent._dynamics.observe(embed, data['action'])

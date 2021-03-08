@@ -6,7 +6,7 @@ import uuid
 
 import imageio
 
-import tools
+import dreamer.tools as tools
 import numpy as np
 
 import tensorflow as tf

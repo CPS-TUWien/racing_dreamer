@@ -9,7 +9,7 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 from dreamer.plotting.aggregators import MeanStd, MeanMinMax
 from dreamer.plotting.log_parsers import EvaluationParser
 from dreamer.plotting.plot_test_evaluation import plot_error_bar
-from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, SHORT_TRACKS_DICT, PALETTE
+from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, FONTSIZE
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -67,9 +67,11 @@ def main(args):
             if not type(axes) == np.ndarray:  # in case of fig with a single axis
                 axes = [axes]
             handles, labels = axes[-1].get_legend_handles_labels()
-            fig.legend(handles, labels, loc='lower center', ncol=len(labels), framealpha=1.0, handletextpad=0.1)
-        filename = f'time_' + '_'.join(train_tracks) + f'_{aggregator}_{timestamp}.png'
+            fig.legend(handles, labels, loc='lower center', ncol=len(labels), framealpha=1.0,
+                       handletextpad=0.1, fontsize=FONTSIZE, columnspacing=0.2)
+        filename = f'time_' + '_'.join(train_tracks) + f'_{aggregator}_{timestamp}.pdf'
         fig.tight_layout(pad=2.5)
+        plt.subplots_adjust(bottom=0.25)
         fig.savefig(args.outdir / filename)
         print(f"[Info] Written {args.outdir / filename}")
 

@@ -7,7 +7,7 @@ COLORS = {
     'lstm-ppo': '#ff7f00', 'ppo': '#a65628',
     'sac': '#888888', 'ftg': '#fdbf6f'
 }
-
+FONTSIZE=14
 OBSTYPE_DICT = {"lidar": "distance", "lidar_occupancy": "occupancy", "lidaroccupancy": "occupancy", }
 
 LONG_TRACKS_DICT = {'austria': 'AUSTRIA', 'columbia': 'COLUMBIA',
