@@ -1,4 +1,4 @@
-# Racing Dreamer: Model-based Reinforcement Learning Improves Autonomous Racing Performance
+# Racing Dreamer: Model-based versus Model-free Deep Reinforcement Learning for Autonomous Racing Cars
 
 In this work, we propose to learn a racing controller directly from raw Lidar observations.
 
