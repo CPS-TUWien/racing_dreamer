@@ -6,14 +6,18 @@ The resulting policy has been evaluated on F1tenth-like tracks and then transfer
 
 ![Racing Dreamer](docs/readme/treitl_sim2real.gif)
 
+The free version is available [on arXiv](https://arxiv.org/abs/2103.04909).
+
 If you find this code useful, please reference in your paper:
 
 ```
-@article{racingdreamer2021, 
-  title={Model-based versus Model-free Deep Reinforcement Learning for Autonomous Racing Cars},
-  author={Brunnbauer, Axel and Berducci, Luigi and Brandstaetter, Andreas and Lechner, Mathias and Hasani, Ramin and Rus, Daniela and Grosu, Radu},
-  journal={TBD},
-  year={2021}
+@misc{brunnbauer2021modelbased,
+      title={Model-based versus Model-free Deep Reinforcement Learning for Autonomous Racing Cars}, 
+      author={Axel Brunnbauer and Luigi Berducci and Andreas Brandstätter and Mathias Lechner and Ramin Hasani and Daniela Rus and Radu Grosu},
+      year={2021},
+      eprint={2103.04909},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
 }
 ```
 
