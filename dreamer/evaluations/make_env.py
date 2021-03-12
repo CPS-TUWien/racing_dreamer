@@ -1,6 +1,6 @@
-import dreamer.wrappers as wrappers
+import wrappers as wrappers
 from racecar_gym.envs import MultiAgentScenario, ChangingTrackMultiAgentRaceEnv, MultiAgentRaceEnv
-from dreamer.callbacks import save_eval_videos, save_episodes, save_trajectory, summarize_episode, summarize_eval_episode
+from callbacks import save_eval_videos, save_episodes, save_trajectory, summarize_episode, summarize_eval_episode
 
 
 def make_multi_track_env(tracks, action_repeat, rendering=True, is_dreamer=True):

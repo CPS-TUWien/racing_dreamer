@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from typing import Tuple
-from dreamer.plotting.structs import OBSTYPE_DICT, ALL_VARIANTS_DICT
+from structs import OBSTYPE_DICT, ALL_VARIANTS_DICT
 
 
 class Parser():

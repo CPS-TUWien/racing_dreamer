@@ -5,11 +5,11 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from dreamer.plotting.aggregators import MeanStd
-from dreamer.plotting.utils import load_runs
-from dreamer.plotting.log_parsers import ModelFreeParser, DreamerParser
+from aggregators import MeanStd
+from utils import load_runs
+from log_parsers import ModelFreeParser, DreamerParser
 
-from dreamer.plotting.structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, BEST_MFREE_PERFORMANCES, \
+from structs import LONG_TRACKS_DICT, ALL_METHODS_DICT, BEST_MFREE_PERFORMANCES, \
     BEST_DREAMER_PERFORMANCES, COLORS, FONTSIZE
 
 
