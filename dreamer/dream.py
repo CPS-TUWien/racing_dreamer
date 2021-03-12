@@ -11,17 +11,17 @@ import logging
 
 import yaml
 
-import dreamer.tools as tools
-import dreamer.wrappers as wrappers
+import tools as tools
+import wrappers as wrappers
 from agents.gap_follower import GapFollower
 
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.mixed_precision import experimental as prec
 
-import dreamer.callbacks as callbacks
+import callbacks as callbacks
 
-from dreamer.models import Dreamer
+from models import Dreamer
 
 tf.get_logger().setLevel('ERROR')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
