@@ -11,7 +11,7 @@ class RaceCarBaseEnv:
     def __init__(self, track, task, rendering=False):
         env_id = track
         if env_id not in envs.keys():
-            scenario = MultiAgentScenario.from_spec(f"dreamer/scenarios/{task}/{track}.yml", rendering=rendering)
+            scenario = MultiAgentScenario.from_spec(f"scenarios/{task}/{track}.yml", rendering=rendering)
             envs[env_id] = MultiAgentRaceEnv(scenario=scenario)
         self._env = envs[env_id]
 

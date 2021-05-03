@@ -6,7 +6,7 @@ from callbacks import save_eval_videos, save_episodes, save_trajectory, summariz
 def make_multi_track_env(tracks, action_repeat, rendering=True, is_dreamer=True):
   # note: problem of multi-track racing env with wrapper `OccupancyMapObs` because it initializes the map once
   # ideas to solve this issue? when changing env force the update of occupancy map in wrapper?
-  scenarios = [MultiAgentScenario.from_spec(f'dreamer/scenarios/eval/{track}.yml', rendering=rendering) for track in tracks]
+  scenarios = [MultiAgentScenario.from_spec(f'scenarios/eval/{track}.yml', rendering=rendering) for track in tracks]
   env = ChangingTrackMultiAgentRaceEnv(scenarios=scenarios, order='manual')
   env = wrappers.RaceCarWrapper(env)
   env = wrappers.FixedResetMode(env, mode='grid')
@@ -16,7 +16,7 @@ def make_multi_track_env(tracks, action_repeat, rendering=True, is_dreamer=True)
   return env
 
 def make_single_track_env(track, action_repeat, rendering=True):
-  scenario = MultiAgentScenario.from_spec(f'dreamer/scenarios/eval/{track}.yml', rendering=rendering)
+  scenario = MultiAgentScenario.from_spec(f'scenarios/eval/{track}.yml', rendering=rendering)
   env = MultiAgentRaceEnv(scenario=scenario)
   env = wrappers.RaceCarWrapper(env)
   env = wrappers.FixedResetMode(env, mode='grid')
