@@ -21,12 +21,12 @@ You can build all three images by running the [build script](./scripts/build_all
 ```bash
 ./scripts/build_all.sh
 ```
-If you want to build the images one by one, you can do yo by specifying the correct Dockerfile:
+If you want to build the images one by one, you can do so by specifying the correct Dockerfile:
 ```shell
 docker build -t tuwcps/racing:<tag> -f docker/Dockerfile.<tag>.
 ```
 
-where `tag` is one of `<|acme|sb3|sb2>`.
+where `tag` is one of `acme`, `sb3`, or `sb2`.
 
 ## Usage
 
