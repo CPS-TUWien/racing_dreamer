@@ -1,16 +1,18 @@
 from functools import partial
 from typing import Optional, Union, Dict
 
-from baselines.racing import make_mpo_agent
-from baselines.racing.algorithms.d4pg import make_d4pg_agent
-from baselines.racing.algorithms.lstm_mpo import make_lstm_mpo_agent
-from baselines.racing.experiments.acme import SingleAgentExperiment
 import tensorflow as tf
+
+from racing.algorithms import make_mpo_agent
+from racing.algorithms.d4pg import make_d4pg_agent
+from racing.algorithms.lstm_mpo import make_lstm_mpo_agent
+from racing.experiments.acme.experiment import SingleAgentExperiment
+from racing.experiments.util import read_hyperparams
+
 physical_devices = tf.config.list_physical_devices('GPU')
 for device in physical_devices:
     tf.config.experimental.set_memory_growth(device, True)
 
-from baselines.racing.experiments.util import read_hyperparams
 
 
 def choose_agent(name: str, param_file: Union[Optional[str], Dict], checkpoint_path: str):

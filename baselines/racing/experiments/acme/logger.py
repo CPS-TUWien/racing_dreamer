@@ -49,6 +49,9 @@ class PrefixedTensorBoardLogger(Logger):
             in data.items()
         ]), step=step)
 
+    def close(self) -> None:
+        self._logger.close()
+
 
 
 class MetricLogger(Logger):

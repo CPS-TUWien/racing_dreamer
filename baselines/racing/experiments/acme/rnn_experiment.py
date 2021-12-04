@@ -18,10 +18,10 @@ from gym.wrappers import TimeLimit, FilterObservation
 from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 
-from baselines.racing import save_video
-from baselines.racing import InfoToObservation, FixedResetMode
-from baselines.racing import ActionRepeat, Flatten, NormalizeObservations
-from baselines.racing.experiments.acme import TensorBoardLogger, PrefixedTensorBoardLogger
+from racing import save_video
+from racing import InfoToObservation, FixedResetMode
+from racing import ActionRepeat, Flatten, NormalizeObservations
+from racing.experiments.acme import TensorBoardLogger, PrefixedTensorBoardLogger
 
 
 

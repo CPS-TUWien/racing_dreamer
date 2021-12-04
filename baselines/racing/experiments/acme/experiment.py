@@ -5,6 +5,7 @@ from time import time
 from typing import List, Callable, Tuple
 
 import gym
+import imageio
 import numpy as np
 import tensorflow as tf
 from acme.tf import savers
@@ -18,12 +19,18 @@ from gym.wrappers import TimeLimit, FilterObservation
 from racecar_gym import SingleAgentScenario
 from racecar_gym.envs import ChangingTrackSingleAgentRaceEnv
 
-from baselines.racing import save_video
-from baselines.racing import InfoToObservation, FixedResetMode
-from baselines.racing import ActionRepeat, Flatten, NormalizeObservations
-from baselines.racing.experiments.acme import TensorBoardLogger, PrefixedTensorBoardLogger
+from racing.environment import FixedResetMode
+from racing.environment.single_agent import *
+from .logger import TensorBoardLogger, PrefixedTensorBoardLogger
+from racing.environment import *
 
 
+def save_video(filename: str, frames, fps):
+    if not os.path.exists(os.path.dirname(filename)):
+        os.mkdir(os.path.dirname(filename))
+    with imageio.get_writer(f'{filename}.mp4', fps=fps) as video:
+        for frame in frames:
+            video.append_data(frame)
 
 
 class SingleAgentExperiment:
