@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:latest-gpu
+FROM tensorflow/tensorflow:2.4.1-gpu
 RUN apt update && apt install -y git wget
 RUN pip install --user dm-acme\
     && pip install --user dm-acme[jax]\
