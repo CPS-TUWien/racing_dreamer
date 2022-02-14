@@ -130,7 +130,8 @@ Additional material:
 * Folder `docs/mechanical` contains support material for real world race-tracks.
 
 # Citation
-
+If you find this work useful for your own ideas, please cite our paper:
+```
 @misc{brunnbauer2022latent,
       title={Latent Imagination Facilitates Zero-Shot Transfer in Autonomous Racing}, 
       author={Axel Brunnbauer and Luigi Berducci and Andreas Brandstätter and Mathias Lechner and Ramin Hasani and Daniela Rus and Radu Grosu},
@@ -139,3 +140,4 @@ Additional material:
       archivePrefix={arXiv},
       primaryClass={cs.LG}
 }
+```
