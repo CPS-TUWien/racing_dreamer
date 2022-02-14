@@ -1,25 +1,10 @@
-# Racing Dreamer: Model-based versus Model-free Deep Reinforcement Learning for Autonomous Racing Cars
+# Latent Imagination Facilitates Zero-Shot Transfer in Autonomous Racing
 
-In this work, we propose to learn a racing controller directly from raw Lidar observations.
-
-The resulting policy has been evaluated on F1tenth-like tracks and then transfered to real cars.
+We train a model-based RL agent in simulation and, without finetuning, transfer it to small-scale race cars.
 
 ![Racing Dreamer](docs/readme/treitl_sim2real.gif)
 
-The free version is available [on arXiv](https://arxiv.org/abs/2103.04909).
-
-If you find this code useful, please reference in your paper:
-
-```
-@misc{brunnbauer2021modelbased,
-      title={Model-based versus Model-free Deep Reinforcement Learning for Autonomous Racing Cars}, 
-      author={Axel Brunnbauer and Luigi Berducci and Andreas Brandstätter and Mathias Lechner and Ramin Hasani and Daniela Rus and Radu Grosu},
-      year={2021},
-      eprint={2103.04909},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG}
-}
-```
+Paper is available [on arXiv](https://arxiv.org/abs/2103.04909).
 
 
 This repository is organized as follows:
@@ -143,3 +128,14 @@ The codebase for the implementation on real cars is contained in `ros_agent`.
 Additional material:
 * Folder `docs/maps` contains a collection of several tracks to be used in [F1Tenth](https://f1tenth.org/) races.
 * Folder `docs/mechanical` contains support material for real world race-tracks.
+
+# Citation
+
+@misc{brunnbauer2022latent,
+      title={Latent Imagination Facilitates Zero-Shot Transfer in Autonomous Racing}, 
+      author={Axel Brunnbauer and Luigi Berducci and Andreas Brandstätter and Mathias Lechner and Ramin Hasani and Daniela Rus and Radu Grosu},
+      year={2022},
+      eprint={2103.04909},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
