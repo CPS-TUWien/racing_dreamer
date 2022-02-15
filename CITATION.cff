@@ -15,22 +15,22 @@ authors:
     email: axel.brunnbauer@tuwien.ac.at
     affiliation: TU Wien
     orcid: 'https://orcid.org/0000-0002-8934-7355'
-  - given-names: Berducci
-    family-names: Luigi
+  - given-names: Luigi
+    family-names: Berducci
     email: luigi.berducci@tuwien.ac.at
     affiliation: TU Wien
     orcid: 'https://orcid.org/0000-0002-3497-6007'
-  - given-names: Brandstätter
-    family-names: Andreas
+  - given-names: Andreas
+    family-names: Brandstaetter
     email: andreas.brandstaetter@tuwien.ac.at
     orcid: 'https://orcid.org/0000-0003-2820-4446'
     affiliation: TU Wien
-  - given-names: Lechner
-    family-names: Mathias
+  - given-names: Mathias
+    family-names: Lechner
     affiliation: Institute of Science and Technology Austria
     orcid: 'https://orcid.org/0000-0002-6117-0076'
-  - given-names: Hasani
-    family-names: Ramin
+  - given-names: Ramin
+    family-names: Hasani
     orcid: 'https://orcid.org/0000-0002-9889-5222'
     affiliation: Massachusetts Institute of Technology
   - given-names: Daniela
