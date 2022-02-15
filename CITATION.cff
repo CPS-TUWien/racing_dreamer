@@ -1,7 +1,6 @@
 cff-version: 1.2.0
 title: Latent Imagination Facilitates Zero-Shot Transfer in Autonomous Racing
 message: If you use this software, please cite it using the metadata from this file.
-type: article
 authors:
   - given-names: Axel
     family-names: Brunnbauer
@@ -34,6 +33,44 @@ authors:
     family-names: Grosu
     affiliation: TU Wien
     orcid: 'https://orcid.org/0000-0001-5715-2142'
+preferred-citation:
+  type: article
+  authors:
+  - given-names: Axel
+    family-names: Brunnbauer
+    email: axel.brunnbauer@tuwien.ac.at
+    affiliation: TU Wien
+    orcid: 'https://orcid.org/0000-0002-8934-7355'
+  - given-names: Luigi
+    family-names: Berducci
+    email: luigi.berducci@tuwien.ac.at
+    affiliation: TU Wien
+    orcid: 'https://orcid.org/0000-0002-3497-6007'
+  - given-names: Andreas
+    family-names: Brandstaetter
+    email: andreas.brandstaetter@tuwien.ac.at
+    orcid: 'https://orcid.org/0000-0003-2820-4446'
+    affiliation: TU Wien
+  - given-names: Mathias
+    family-names: Lechner
+    affiliation: Institute of Science and Technology Austria
+    orcid: 'https://orcid.org/0000-0002-6117-0076'
+  - given-names: Ramin
+    family-names: Hasani
+    orcid: 'https://orcid.org/0000-0002-9889-5222'
+    affiliation: Massachusetts Institute of Technology
+  - given-names: Daniela
+    family-names: Rus
+    orcid: 'https://orcid.org/0000-0001-5473-3566'
+    affiliation: Massachusetts Institute of Technology
+  - given-names: Radu
+    family-names: Grosu
+    affiliation: TU Wien
+    orcid: 'https://orcid.org/0000-0001-5715-2142'
+  url: "https://arxiv.org/abs/2103.04909"
+  journal: 'arXiv'
+  year: 2022
+  title: "Latent Imagination Facilitates Zero-Shot Transfer in Autonomous Racing"
 identifiers:
   - type: url
     value: 'https://arxiv.org/abs/2103.04909'
