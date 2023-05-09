@@ -2,7 +2,7 @@ tensorflow==2.3.1
 tensorflow_probability==0.11.1
 numpy
 gym
--e git+https://github.com/axelbr/racecar_gym.git@gym-api#egg=racecar_gym
+-e git+https://github.com/axelbr/racecar_gym.git@icra2022#egg=racecar_gym
 tensorflow-plot
 pandas
 matplotlib
