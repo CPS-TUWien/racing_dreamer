@@ -1,6 +1,10 @@
 FROM tensorflow/tensorflow:2.3.1-gpu AS base
 
 # update
+# nvidia-docker issue: workaround https://github.com/NVIDIA/nvidia-docker/issues/1632
+RUN rm /etc/apt/sources.list.d/cuda.list
+RUN rm /etc/apt/sources.list.d/nvidia-ml.list
+
 RUN python --version && pip --version && pip list
 RUN apt update -y && apt install git wget unzip -y
 
